@@ -182,7 +182,7 @@ nmap <leader>w :w<cr>
 nmap <leader>e :e $VIM/_vimrc<cr>
 nmap <leader>wq :wq<cr>
 nmap <leader>q :q<cr>
-
+nmap <leader>help :help<space>
 
 map <space><cr> :nohl<cr>
 map <leader>tn :tabnew<cr>
