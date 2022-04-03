@@ -50,7 +50,9 @@ set rtp+=$VIM/vimfiles/bundle/Vundle.vim
 call vundle#begin('$VIM/vimfiles/bundle/')
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'Valloric/YoucompleteMe'
+"Plugin 'Valloric/YoucompleteMe'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -157,8 +159,10 @@ set guifont=JetBrains_Mono:h14:cANSI
 " Format {{{
 set autoindent
 set smartindent
+set smartcase
 set tabstop=4
 set expandtab
+set shiftwidth=2
 set softtabstop=4
 set foldmethod=indent
 syntax on
@@ -167,20 +171,24 @@ syntax on
 
 " Keymap {{{
 " 自定义命令用   ,
-let mapleader=","
+let mapleader=" "
 " vim自带命令用空格来替代:
-nnoremap <Space> :
+noremap ; :
 
 
 "-------------------NORMAL MODE-----------------------------
 nmap <leader>s :source $VIM/_vimrc<cr>
+nmap <leader>w :w<cr>
 nmap <leader>e :e $VIM/_vimrc<cr>
- 
+nmap <leader>wq :wq<cr>
+nmap <leader>q :q<cr>
+
+
+map <space><cr> :nohl<cr>
 map <leader>tn :tabnew<cr>
 map <leader>tc :tabclose<cr>
 map <leader>th :tabp<cr>
 map <leader>tl :tabn<cr>
- 
 " 移动分割窗口
 nmap <C-j> <C-W>j
 nmap <C-k> <C-W>k
@@ -192,7 +200,9 @@ nnoremap <M-j> :resize +5<cr>
 nnoremap <M-k> :resize -5<cr>
 nnoremap <M-h> :vertical resize -5<cr>
 nnoremap <M-l> :vertical resize +5<cr>
- 
+
+nnoremap <S-k> 3k
+nnoremap <S-j> 3j
 " 打开当前目录 windows
 map <leader>ex :!start explorer %:p:h<CR>
  
@@ -205,7 +215,7 @@ map <F3> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
 nmap ,fn :let @*=substitute(expand("%"), "/", "\\", "g")<CR>
 nmap ,fp :let @*=substitute(expand("%:p"), "/", "\\", "g")<CR>
 " 设置行号显示 
-nnoremap <F2> :setlocal number!<cr>
+nnoremap <F2> :setlocal relativenumber!<cr>
 " 设置切换Buffer快捷键"
 nnoremap <C-left> :bn<CR>
 nnoremap <C-right> :bp<CR>
