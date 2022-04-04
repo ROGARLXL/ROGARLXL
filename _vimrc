@@ -344,3 +344,7 @@ exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 "ip         --'inner paragraph'
 "           --'a' including identifier,but 'inner' not
 "           --'w':word  'p':paragragh   'b':block   '()' [] {}
+"zn,zN      --打开所有折叠
+"za，zA     --打开当前光标位置所有折叠
+"zc，zo     --关闭、打开折叠
+"
