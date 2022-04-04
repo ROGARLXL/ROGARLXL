@@ -42,6 +42,15 @@ function MyDiff()
   endif
 endfunction
 
+" Lang & Encoding {{{
+set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
+set encoding=utf-8
+set langmenu=zh_CN
+let $LANG = 'en_US.UTF-8'
+"language messages zh_CN.UTF-8
+" }}}
+
+
 " Plugin-Mng {{{ 
 filetype off
 "set shellslash
@@ -51,8 +60,15 @@ call vundle#begin('$VIM/vimfiles/bundle/')
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 "Plugin 'Valloric/YoucompleteMe'
+" Theme
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'connorholyday/vim-snazzy'
+" 
+Plugin 'jiangmiao/auto-pairs'
+" File navigation
+Plugin 'preservim/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -69,7 +85,43 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 " }}}
 "
+" Plugin-vim-airline {{{
 
+" }}}
+
+" Plugin-auto-pairs {{{
+
+" }}}
+
+" Plugin-nerdtree {{{
+nnoremap <leader>nt :NERDTreeToggle<CR>
+nnoremap <leader>ntf :NERDTreeFRefreshRoot<CR>
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'✹',
+                \ 'Staged'    :'✚',
+                \ 'Untracked' :'✭',
+                \ 'Renamed'   :'➜',
+                \ 'Unmerged'  :'═',
+                \ 'Deleted'   :'✖',
+                \ 'Dirty'     :'✗',
+                \ 'Ignored'   :'☒',
+                \ 'Clean'     :'✔︎',
+                \ 'Unknown'   :'?',
+                \ }
+" }}}
+"let g:NERDTreeGitStatusIndicatorMapCustom = {
+                "\ 'Modified'  :'✹',
+                "\ 'Staged'    :'✚',
+                "\ 'Untracked' :'✭',
+                "\ 'Renamed'   :'➜',
+                "\ 'Unmerged'  :'═',
+                "\ 'Deleted'   :'✖',
+                "\ 'Dirty'     :'✗',
+                "\ 'Ignored'   :'☒',
+                "\ 'Clean'     :'✔︎',
+                "\ 'Unknown'   :'?',
+                "\ }
+" }}}
 " Plugin-YouCompleMe {{{
 " YouCompleteMe
 let g:pydiction_location='C:\Program Files (x86)\Vim\vim82\vimfiles\ftplugin\complet-edict'
@@ -101,7 +153,7 @@ filetype indent plugin on
 " vim 文件折叠方式为 marker
 augroup ft_vim
     autocmd!
-    autocmd FileType vim setlocal foldmethod=marker
+    "autocmd FileType vim setlocal foldmethod=marker
 augroup END
 " }}}
 
@@ -122,21 +174,17 @@ set winaltkeys=no
 " }}}
 
 
-" Lang & Encoding {{{
-set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
-set encoding=utf-8
-set langmenu=zh_CN
-let $LANG = 'en_US.UTF-8'
-"language messages zh_CN.UTF-8
-" }}}
+
 
 " GUI {{{
-colorscheme evening
+"colorscheme evening
+colorscheme snazzy
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 set cursorline
 set hlsearch
 set number
+set relativenumber
 " 窗口大小
 set lines=35 columns=140
 " 分割出来的窗口位于当前窗口下边/右边
@@ -183,12 +231,17 @@ nmap <leader>e :e $VIM/_vimrc<cr>
 nmap <leader>wq :wq<cr>
 nmap <leader>q :q<cr>
 nmap <leader>help :help<space>
-
+" 标签页管理
 map <space><cr> :nohl<cr>
 map <leader>tn :tabnew<cr>
 map <leader>tc :tabclose<cr>
 map <leader>th :tabp<cr>
 map <leader>tl :tabn<cr>
+" 分割窗口管理
+noremap <leader>sl :set splitright<CR>:vsplit<CR>
+noremap <leader>sh :set nosplitright<CR>:vsplit<CR>
+noremap <leader>sk :set nosplitbelow<CR>:split<CR>
+noremap <leader>sj :set splitbelow<CR>:split<CR>
 " 移动分割窗口
 nmap <C-j> <C-W>j
 nmap <C-k> <C-W>k
@@ -200,9 +253,11 @@ nnoremap <M-j> :resize +5<cr>
 nnoremap <M-k> :resize -5<cr>
 nnoremap <M-h> :vertical resize -5<cr>
 nnoremap <M-l> :vertical resize +5<cr>
-
+" 快速移动 shift + 方向键
 nnoremap <S-k> 3k
 nnoremap <S-j> 3j
+" goto mark位置
+nnoremap gm g`
 " 打开当前目录 windows
 map <leader>ex :!start explorer %:p:h<CR>
  
@@ -221,9 +276,9 @@ nnoremap <C-left> :bn<CR>
 nnoremap <C-right> :bp<CR>
 "选择当前行 
 nnoremap vv ^vg_
-"设置/取消高亮显示
-nnoremap <M-h> :nohl<CR>
-nnoremap <M-H> :hls<CR>
+"设置/取消高亮显示 //和调整分割窗口有冲突
+" nnoremap <M-h> :nohl<CR>
+" nnoremap <M-H> :hls<CR>
 "跳转至行尾
 
 "-------------------INSERT MODE-----------------------------
@@ -235,8 +290,9 @@ inoremap <M-l> <Right>
 inoremap jj <Esc>
 "复制当前行到下一行
 inoremap <C-d> <esc>"xyy<CR>"xP<CR>2k<CR>i
-" 
+" 删除前一个Word
 inoremap <C-BS> <Esc>bdei
+
 imap <C-V>		"+gP
 " 转换当前word行为大写
 inoremap <C-u> <esc>mzgUiw`za
@@ -262,3 +318,29 @@ exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 " }}}
 
 
+"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"+++++++++++++++++++++++++++++++++++++DEVELOP ENV+++++++++++++++++++++++++++++++++
+"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+" JAVA {{{
+"setlocal omnifunc=javacomplete#Complete
+"autocmd Filetype java set omnifunc=javacomplete#Complete 
+"autocmd Filetype java set completefunc=javacomplete#CompleteParamsInf
+"inoremap <buffer> <C-X><C-U> <C-X><C-U><C-P> 
+"inoremap <buffer> <C-S-Space> <C-X><C-U><C-P>
+"autocmd Filetype java,javascript,jsp inoremap <buffer>  .  .<C-X><C-O><C-P>
+"}}}
+
+
+
+""操作技巧"
+"""Normal Mode
+" :数字     --跳转到该行
+" 数字%     --跳转到百分比位置
+" gE        --回到上一个单词
+" %         --跳转到匹配的括号
+"aw         --'a word' select choice
+"iw         --'inner word' select choice
+"ap         --'a paragragh'
+"ip         --'inner paragraph'
+"           --'a' including identifier,but 'inner' not
+"           --'w':word  'p':paragragh   'b':block   '()' [] {}
