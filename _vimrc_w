@@ -73,12 +73,15 @@ Plugin 'skywind3000/asyncrun.vim'
 Plugin 'python-mode/python-mode'
 " File navigation
 Plugin 'preservim/nerdtree'
+" git
+Plugin 'tpope/vim-fugitive'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
-
+"Plugin 'ryanoasis/vim-devicons'
+"Plugin 'tiagofumo/vim-nerdtree-syntax-highlight'
 " Taglist
 Plugin 'majutsushi/tagbar'
 " Asynchronous Lint Engine //Syntax Error Check 
-Plugin 'dense-analysis/ale'
+" Plugin 'dense-analysis/ale'
 " Markdown 
 Plugin 'godlygeek/tabular'
 Plugin 'preservim/vim-markdown'
@@ -107,14 +110,22 @@ filetype plugin indent on    " required
 autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 " Open the existing NERDTree on each new tab.
 autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-
+" adding to vim-airline's statusline
+"let g:webdevicons_enable_airline_statusline = 1
+" loading the plugin
+"let g:webdevicons_enable = 1
 "" }}}
+" Plugin-fugitive-git {{{
+nnoremap <leader>Git :Git
+
+" }}}
+" 
 " Plugin-vim-airline {{{
 " }}}
 " "
 " Plugin-PyMode {{{
-let g:pymode_run_bind='<F5>'
-
+let g:pymode_run_bind='<leader>r'
+let g:pymode = 1
 let g:pymode_rope_goto_definition_bind = ''
 "}}}
 " Plugin-Taglist {{{
@@ -445,6 +456,7 @@ nnoremap <C-right> :bp<CR>
 nnoremap vv ^vg_
 " 重复上次操作
 nnoremap U <C-r>
+nnoremap <leader>sav :saveas<Space>
 
 "-------------------INSERT MODE-----------------------------
 " 插入模式移动光标 alt + 方向键
@@ -499,8 +511,20 @@ func! CompileRunGcc()
         elseif &filetype == 'html'
                 exec "!firefox % &"
         elseif &filetype == 'go'
-                " exec "!go build %<"
+                exec "!go build %<"
                 exec "!time go run %"
+        elseif &filetype == 'python'
+            if search("@profile")
+                exec "AsyncRun kernprof -l -v %"
+                exec "copen"
+                exec "wincmd p"
+            elseif search("set_trace()")
+                exec "!python %"
+            else
+                exec "AsyncRun -raw python %"
+                exec "copen"
+                exec "wincmd p"
+            endif
         elseif &filetype == 'markdown'
                 "exec "!~/.vim/markdown.pl % > %.html &"
                 "exec "!google chrome %.html &"
@@ -566,4 +590,3 @@ endfunc
 "zn,zN      --打开所有折叠
 "za，zA     --打开当前光标位置所有折叠
 "zc，zo     --关闭、打开折叠
-"
