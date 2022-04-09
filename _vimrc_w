@@ -69,7 +69,7 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'connorholyday/vim-snazzy'
 " Python
 Plugin 'jiangmiao/auto-pairs'
-Plugin 'skywind3000/asyncrun.vim'
+"Plugin 'skywind3000/asyncrun.vim'
 Plugin 'python-mode/python-mode'
 " File navigation
 Plugin 'preservim/nerdtree'
@@ -81,7 +81,7 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 " Taglist
 Plugin 'majutsushi/tagbar'
 " Asynchronous Lint Engine //Syntax Error Check 
-" Plugin 'dense-analysis/ale'
+"Plugin 'dense-analysis/ale'
 " Markdown 
 Plugin 'godlygeek/tabular'
 Plugin 'preservim/vim-markdown'
@@ -124,9 +124,47 @@ nnoremap <leader>Git :Git
 " }}}
 " "
 " Plugin-PyMode {{{
-let g:pymode_run_bind='<leader>r'
 let g:pymode = 1
+let g:pymode_run = 1
+let g:pymode_run_bind='<leader>r'
 let g:pymode_rope_goto_definition_bind = ''
+let g:pymode_python = 'python'
+let g:pymode_indent = 1
+"Turn on code checking                                           *'g:pymode_lint'*
+let g:pymode_lint = 1
+"Check code on every save (if file has been modified)   *'g:pymode_lint_on_write'*
+let g:pymode_lint_on_write = 1
+"Check code on every save (every)                     *'g:pymode_lint_unmodified'*
+let g:pymode_lint_unmodified = 0
+"Check code when editing (on the fly)                     *'g:pymode_lint_on_fly'*
+let g:pymode_lint_on_fly = 0
+"Show error message if cursor placed at the error line   *'g:pymode_lint_message'*
+let g:pymode_lint_message = 1
+" Default code checkers (you could set several)          *'g:pymode_lint_checkers'*
+let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
+" Skip errors and warnings
+let g:pymode_lint_ignore = ["E501", "W",]
+" Auto open cwindow (quickfix) if any errors have been found
+let g:pymode_lint_cwindow = 1
+" Definitions for |signs
+let g:pymode_lint_signs = 1
+let g:pymode_lint_todo_symbol = 'WW'
+let g:pymode_lint_comment_symbol = 'CC'
+let g:pymode_lint_visual_symbol = 'RR'
+let g:pymode_lint_error_symbol = 'EE'
+let g:pymode_lint_info_symbol = 'II'
+let g:pymode_lint_pyflakes_symbol = 'FF'
+"
+"COMMAND
+"|:PymodeRopeAutoImport| -- Resolve import for element under cursor
+"|:PymodeRopeModuleToPackage| -- Convert current module to package
+"|:PymodeRopeNewProject| -- Open new Rope project in current working directory
+"|:PymodeRopeRedo| -- Redo changes from last refactoring
+"|:PymodeRopeRegenerate| -- Regenerate the project cache
+"|:PymodeRopeRenameModule| -- Rename current module
+"|:PymodeRopeUndo| -- Undo changes from last refactoring
+"
+"
 "}}}
 " Plugin-Taglist {{{
 nmap <leader>ll :TagbarToggle<cr>
