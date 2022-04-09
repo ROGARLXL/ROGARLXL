@@ -64,15 +64,21 @@ call vundle#begin('$VIM/vimfiles/bundle/')
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'Valloric/YoucompleteMe'
 " Theme
-Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline' 
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'connorholyday/vim-snazzy'
-" 
+" Python
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'skywind3000/asyncrun.vim'
+Plugin 'python-mode/python-mode'
 " File navigation
 Plugin 'preservim/nerdtree'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 
+" Taglist
+Plugin 'majutsushi/tagbar'
+" Asynchronous Lint Engine //Syntax Error Check 
+Plugin 'dense-analysis/ale'
 " Markdown 
 Plugin 'godlygeek/tabular'
 Plugin 'preservim/vim-markdown'
@@ -95,10 +101,40 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 " }}}
-"
-" Plugin-vim-airline {{{
+" 
+" Plugin-Navigation{{{
+"" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" Open the existing NERDTree on each new tab.
+autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
 
+"" }}}
+" Plugin-vim-airline {{{
 " }}}
+" "
+" Plugin-PyMode {{{
+let g:pymode_run_bind='<F5>'
+
+let g:pymode_rope_goto_definition_bind = ''
+"}}}
+" Plugin-Taglist {{{
+nmap <leader>ll :TagbarToggle<cr>
+
+"默认打开vim时自动开启taglist
+"let Tlist_Auto_Open=1	"默认打开vim时自动开启taglist
+""自动更新tag
+"let Tlist_Auto_Update=1 "自动更新tag
+""只显示当前文件
+"let Tlist_Show_One_File=1	"只显示当前文件
+""taglist窗口的宽度
+"let Tlist_WinWidth=40	"taglist窗口的宽度
+"" taglist Height
+"let Tlist_WinHeight=60
+""如果退出时仅剩taglist窗口，则直接退出vim
+"let Tlist_Exit_OnlyWindow=1	"如果退出时仅剩taglist窗口，则直接退出vim
+"let Tlist_Use_Right_Window=1
+
+"" }}}
 
 " ferrine/md-img-paste.vim {{{
 autocmd FileType markdown nmap <buffer><silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
@@ -266,8 +302,9 @@ let g:ycm_global_ycm_extra_conf='$VIM/bundle/YouCompleteMe/third_party/ycmd/cpp/
 let g:ycm_show_diagnostics_ui = 0                           " 禁用语法检查
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>" |            
 " 回车即选中当前项
-"nnoremap <c-j> :YcmCompleter GoToDefinitionElseDeclaration<CR>|    
-" 跳转到定义处
+nnoremap <leader>j :YcmCompleter GoToDefinitionElseDeclaration<CR> 
+nnoremap <leader>jump :YcmCompleter GoToDefinitionElseDeclaration<CR> 
+" 跳转到定义处====重复快捷键
 "let g:ycm_min_num_of_chars_for_completion=2                 " 从第2个键入字符就开始罗列匹配项
 " }}}
 " ------------------------------------------------------------------------
@@ -287,6 +324,9 @@ set nocompatible
 set nobackup
 set noswapfile
 set history=1024
+set directory=D:\0-ROGAR\3-Code\0-Notes\vim-config\swp
+set backupdir=D:\0-ROGAR\3-Code\0-Notes\vim-config\backup
+set undodir=D:\0-ROGAR\3-Code\0-Notes\vim-config\un
 set autochdir
 set whichwrap=b,s,<,>,[,]
 set nobomb
@@ -303,8 +343,8 @@ set winaltkeys=no
 " GUI {{{
 "colorscheme evening
 colorscheme snazzy
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
+"source $VIMRUNTIME/delmenu.vim
+"source $VIMRUNTIME/menu.vim
 set cursorline
 set hlsearch
 set number
@@ -355,7 +395,8 @@ nmap <leader>e :e $VIM/_vimrc<cr>
 nmap <leader>wq :wq<cr>
 nmap <leader>q :q<cr>
 nmap <leader>help :help<space>
-" 标签页管理 
+nmap <leader>h :help<space>
+"标签页管理 
 "
 map <space><cr> :nohl<cr>
 map <leader>tn :tabnew<cr>
@@ -402,7 +443,8 @@ nnoremap <C-left> :bn<CR>
 nnoremap <C-right> :bp<CR>
 "选择当前行 
 nnoremap vv ^vg_
-
+" 重复上次操作
+nnoremap U <C-r>
 
 "-------------------INSERT MODE-----------------------------
 " 插入模式移动光标 alt + 方向键
@@ -415,7 +457,6 @@ inoremap jj <Esc>
 inoremap <C-d> <esc>"xyy<CR>"xP<CR>2k<CR>i
 " 删除前一个Word
 inoremap <C-BS> <Esc>bdei
-
 imap <C-V>		"+gP
 " 转换当前word行为大写
 inoremap <C-u> <esc>mzgUiw`za
@@ -433,9 +474,9 @@ map <S-Insert>		"+gP
 " 命令模式下的行首尾
 cnoremap <C-a> <home>
 cnoremap <C-e> <end>
-cmap <C-V>		<C-R>+
+cmap <C-v>		<C-R>+
 cmap <S-Insert>		<C-R>+ 
-" 常规操作-复制、黏贴、选择 COPY CUT PASTE SELETED
+" 常规操作-复制、黏贴、选择 CO/PY CUT PASTE SELETED
 exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 
@@ -443,8 +484,10 @@ map <F5> :call CompileRunGcc()<CR>
 func! CompileRunGcc()
         exec "w"
         if &filetype == 'c'
-                exec "!g++ % -o %<"
-                exec "!time ./%<"
+                exec "!gcc % -o %<"
+                exec "AsyncRun -raw %<"
+                exec "copen"
+                exec "wincmd p" 
         elseif &filetype == 'cpp'
                 exec "!g++ % -o %<"
                 exec "!time ./%<"
@@ -453,8 +496,6 @@ func! CompileRunGcc()
                 exec "!time java %<"
         elseif &filetype == 'sh'
                 :!time bash %
-        elseif &filetype == 'python'
-                exec "!python %"
         elseif &filetype == 'html'
                 exec "!firefox % &"
         elseif &filetype == 'go'
@@ -490,6 +531,24 @@ endfunc
 "autocmd Filetype java,javascript,jsp inoremap <buffer>  .  .<C-X><C-O><C-P>
 "}}}
 
+" PYTHON {{{
+"elseif &filetype == 'python'
+                "if search(""@profile")
+                    "exec ""AsyncRun kernprof -l -v %"
+                    "exec ""copen"
+                    "exec ""wincmd p"
+                "elseif search(""set_trace()")
+                    "exec ""!python %"
+                "else
+                    "exec ""AsyncRun -raw python %"
+                    "exec ""copen"
+                    "exec ""wincmd p"
+                "endif
+        "
+" }}}
+
+"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"+++++++++++++++++++++++++++++++++++++DEVELOP ENV+++++++++++++++++++++++++++++++++
 
 
 ""操作技巧"
@@ -507,3 +566,4 @@ endfunc
 "zn,zN      --打开所有折叠
 "za，zA     --打开当前光标位置所有折叠
 "zc，zo     --关闭、打开折叠
+"
