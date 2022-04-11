@@ -1,3 +1,11 @@
+" Vim with all enhancements----GVIM
+"          _____             _____   ____   _____  
+"         |  __ \     /\    / ____| / __ \ |  __ \ 
+"         | |__) |   /  \  | |  __ | |  | || |__) |
+"         |  _  /   / /\ \ | | |_ || |  | ||  _  / 
+"         | | \ \  / ____ \| |__| || |__| || | \ \ 
+"         |_|  \_\/_/    \_\\_____| \____/ |_|  \_\
+"
 " VIM_EXAMPLE{{{
 " Vim with all enhancements
 source $VIMRUNTIME/vimrc_example.vim
