@@ -54,9 +54,12 @@ endfunction
 
 " Lang & Encoding {{{
 set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
+set fileformat=unix
 set encoding=utf-8
-set langmenu=zh_CN
-let $LANG = 'zh_CN.UTF-8'
+set langmenu=en_US
+"set langmenu=zh_CN
+let $LANG = 'en_US.UTF-8'
+"let $LANG = 'zh_CN.UTF-8'
 "let $LANG = 'en_US.UTF-8'
 "}}}
 
@@ -83,6 +86,9 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'connorholyday/vim-snazzy'
 " Python
 Plug 'jiangmiao/auto-pairs'
+Plug 'vim-python/python-syntax'
+"CPP
+Plug 'octol/vim-cpp-enhanced-highlight'
 "Plug 'skywind3000/asyncrun.vim'
 Plug 'puremourning/vimspector'
 "Plug 'python-mode/python-mode'
@@ -91,7 +97,7 @@ Plug 'preservim/nerdtree'
 " git
 Plug 'tpope/vim-fugitive'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-"Plug 'ryanoasis/vim-devicons'
+Plug 'ryanoasis/vim-devicons'
 Plug 'airblade/vim-gitgutter'
 "Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " Taglist
@@ -113,18 +119,18 @@ filetype plugin indent on    " required
 " }}}
  
 " Plugin-Navigation{{{
-"" Exit Vim if NERDTree is the only window remaining in the only tab.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-" Open the existing NERDTree on each new tab.
-autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-" adding to vim-airline's statusline
-"let g:webdevicons_enable_airline_statusline = 1
-" loading the plugin
-"let g:webdevicons_enable = 1
 "" }}}
 
 " Plugin-fugitive-git {{{
 nnoremap <leader>Git :Git
+cnoremap gM Git merge master<CR>
+cnoremap gm Git merge<Space>
+cnoremap gt Git branch -a<CR>zn:Git checkout<Space> 
+cnoremap gc Git commit -m""<left>
+cnoremap gu Git pull
+cnoremap gp Git push
+cnoremap git Git<Space>
+
 " }}}
 
 " Plugin-vimspector {{{
@@ -176,9 +182,9 @@ nmap <S-F10> <Plug>VimspectorDownFrame
 " }}}
 
 " Plugin-GitGutter{{{
-let g:gitgutter_sign_allow_clobber = 0
+let g:gitgutter_sign_allow_clobber = 1
 let g:gitgutter_map_keys = 0
-let g:gitgutter_override_sign_column_highlight = 0
+let g:gitgutter_override_sign_column_highlight = 1
 let g:gitgutter_preview_win_floating = 1
 let g:gitgutter_sign_added = '▎'
 let g:gitgutter_sign_modified = '░'
@@ -200,6 +206,8 @@ set updatetime=200
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 set signcolumn=number
+" coc-highlight 光标悬浮处  高亮
+autocmd CursorHold * silent call CocActionAsync('highlight')
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -244,8 +252,8 @@ xmap ic <Plug>(coc-classobj-i)
 omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
-
-
+" auto install extentions 
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver','coc-clangd','coc-python']
 " }}} 
 
 " Plugin-vim-airline {{{
@@ -294,6 +302,16 @@ omap ac <Plug>(coc-classobj-a)
 "
 "
 "}}}
+
+" Plugin-vim-cpp-enhanced-highlight {{{
+let g:cpp_experimental_template_highlight = 1
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 0
+let g:cpp_experimental_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+" }}}
 
 " Plugin-Taglist {{{
 nmap <leader>ll :TagbarToggle<cr>
@@ -344,6 +362,7 @@ let g:coc_node_path='C:\Program Files (x86)\nodejs\node.exe'
 " set to 1, nvim will open the preview window after entering the markdown buffer
 " default: 0
 let g:mkdp_auto_start = 0
+autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 "
 "" set to 1, the nvim will auto close current preview window when change
 " from markdown buffer to another buffer
@@ -433,12 +452,23 @@ let g:mkdp_auto_start = 0
 "let g:mkdp_filetypes = ['markdown']
 " }}}
 
-"" Plugin-nerdtree {{{
+" Plugin-nerdtree {{{
 nnoremap <leader>nt :NERDTreeToggle<CR>
 let NERDTreeShowBookmarks=1
 let NERDTreeShowHidden=1
 let NERDTreeWinPos="left"
-"nnoremap <leader>ntf :NERDTreeFRefreshRoot<CR>
+""" Exit Vim if NERDTree is the only window remaining in the only tab.
+autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" Open the existing NERDTree on each new tab.
+autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+" adding to vim-airline's statusline
+let g:webdevicons_enable_airline_statusline = 1
+let g:airline_powerline_fonts = 1
+" loading the plugin
+let g:webdevicons_enable = 1
+let g:webdevicons_conceal_nerdtree_brackets = 0
+let g:webdevicons_enable_nerdtree = 0
+nnoremap <leader>ntf :NERDTreeFRefreshRoot<CR>
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'✹',
                 \ 'Staged'    :'✚',
@@ -477,6 +507,9 @@ set winaltkeys=no
 " GUI {{{
 "colorscheme evening
 colorscheme snazzy
+syntax on
+syntax on
+let g:python_highlight_all = 1
 "source $VIMRUNTIME/delmenu.vim
 "source $VIMRUNTIME/menu.vim
 set cursorline
@@ -588,8 +621,9 @@ nnoremap vv ^vg_
 " 重复上次操作
 nnoremap U <C-r>
 nnoremap <leader>sav :saveas<Space>
+nnoremap <C-a> ggvG$
 
-" ------------------------------------------------------------------------
+" -----------------------------------------------------------------------
 "-------------------------------INSERT MODE-------------------------------
 " ------------------------------------------------------------------------
 " 插入模式移动光标 alt + 方向键
@@ -602,19 +636,21 @@ inoremap jj <Esc>
 inoremap <C-d> <esc>"xyy<CR>"xP<CR>2k<CR>i
 " 删除前一个Word
 inoremap <C-BS> <Esc>bdei
-imap <C-V>		"+gP
+imap <C-V> "+gP
 " 转换当前word行为大写
 inoremap <C-u> <esc>mzgUiw`za
 imap <C-v> "+gP
 " 全选所有buffer字符
-imap <C-a> <esc>ggvG
+imap <C-a> <esc>ggvG$
 " ------------------------------------------------------------------------
 "------------------------------VISUAL MODE---------------------------------
 vmap <C-c> "+y
 vnoremap <BS> d
 vnoremap <C-C> "+y
 vnoremap <C-Insert> "+y 
-
+vnoremap  w aw
+vnoremap  J :move '>+1<CR>gv=gv
+vnoremap  K :move '<-2<CR>gv=gv
 " ------------------------------------------------------------------------
 " --------------------------COMMAND MODE----------------------------------
 " ------------------------------------------------------------------------
@@ -690,6 +726,10 @@ exec "nohlsearch"
 "autocmd Filetype java,javascript,jsp inoremap <buffer>  .  .<C-X><C-O><C-P>
 "}}}
 
+" C {{{
+autocmd BufNewFile *.c 0r $VIM\vimfiles\template\c.tpl
+
+"}}}
 " PYTHON {{{
 "elseif &filetype == 'python'
                 "if search(""@profile")
