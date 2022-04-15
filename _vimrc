@@ -7,49 +7,6 @@
 "         |_|  \_\/_/    \_\\_____| \____/ |_|  \_\
 "
 " VIM_EXAMPLE{{{
-" Vim with all enhancements
-source $VIMRUNTIME/vimrc_example.vim
-
-" Mouse behavior (the Windows way)
-behave mswin
-
-" Use the internal diff if available.
-" Otherwise use the special 'diffexpr' for Windows.
-if &diffopt !~# 'internal'
-  set diffexpr=MyDiff()
-endif
-function MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg1 = substitute(arg1, '!', '\!', 'g')
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg2 = substitute(arg2, '!', '\!', 'g')
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let arg3 = substitute(arg3, '!', '\!', 'g')
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      if empty(&shellxquote)
-        let l:shxq_sav = ''
-        set shellxquote&
-      endif
-      let cmd = '"' . $VIMRUNTIME . '\diff"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  let cmd = substitute(cmd, '!', '\!', 'g')
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
-  if exists('l:shxq_sav')
-    let &shellxquote=l:shxq_sav
-  endif
-endfunction
 "}}}
 
 " Lang & Encoding {{{
@@ -84,6 +41,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'connorholyday/vim-snazzy'
+Plug 'altercation/vim-colors-solarized'
 " Python
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-python/python-syntax'
@@ -91,6 +49,7 @@ Plug 'vim-python/python-syntax'
 Plug 'octol/vim-cpp-enhanced-highlight'
 "Plug 'skywind3000/asyncrun.vim'
 Plug 'puremourning/vimspector'
+"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 "Plug 'python-mode/python-mode'
 " File navigation
 Plug 'preservim/nerdtree'
@@ -122,7 +81,8 @@ filetype plugin indent on    " required
 "" }}}
 
 " Plugin-fugitive-git {{{
-nnoremap <leader>Git :Git
+nnoremap <leader>git :Git
+cnoremap ga Git add<Space>
 cnoremap gM Git merge master<CR>
 cnoremap gm Git merge<Space>
 cnoremap gt Git branch -a<CR>zn:Git checkout<Space> 
@@ -510,6 +470,7 @@ colorscheme snazzy
 syntax on
 syntax on
 let g:python_highlight_all = 1
+
 "source $VIMRUNTIME/delmenu.vim
 "source $VIMRUNTIME/menu.vim
 set cursorline
@@ -571,6 +532,7 @@ nmap <leader>wq :wq<cr>
 nmap <leader>q :q<cr>
 nmap <leader>help :help<space>
 nmap <leader>h :help<space>
+nmap <leader>sav :saveas<Space>
 "标签页管理 
 "
 map <space><cr> :nohl<cr>
@@ -620,7 +582,6 @@ nnoremap <C-right> :bp<CR>
 nnoremap vv ^vg_
 " 重复上次操作
 nnoremap U <C-r>
-nnoremap <leader>sav :saveas<Space>
 nnoremap <C-a> ggvG$
 
 " -----------------------------------------------------------------------
@@ -728,7 +689,12 @@ exec "nohlsearch"
 
 " C {{{
 autocmd BufNewFile *.c 0r $VIM\vimfiles\template\c.tpl
-
+autocmd filetype c highlight cNumber guifg=#FFE920
+autocmd filetype c highlight cString gui=Italic guifg=#C17753
+autocmd filetype c highlight cInclude gui=Italic guifg=#CB59E8
+autocmd filetype c highlight cDefine guifg=#FF7DFF
+autocmd filetype c highlight Conditional guifg=#D881ED
+autocmd filetype c highlight cBoolean guifg=#E37795
 "}}}
 " PYTHON {{{
 "elseif &filetype == 'python'
