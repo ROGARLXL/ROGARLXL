@@ -28,7 +28,7 @@ noremap ; :
 language messages en_US.UTF-8
 " }}}
 " ------------------------------------------------------------------------
-" ------------------------------------------------------------------------
+" ----------------------------------------------------------------------- 
 " Plugin-Mng {{{ 
 filetype off
 "set shellslash
@@ -37,6 +37,7 @@ call plug#begin('$VIM/vimfiles/bundle/')
 " AutoComplete
 "Plug 'Valloric/YoucompleteMe'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'honza/vim-snippets'
 " Theme
 Plug 'vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
@@ -144,7 +145,7 @@ nmap <S-F10> <Plug>VimspectorDownFrame
 " Plugin-GitGutter{{{
 let g:gitgutter_sign_allow_clobber = 1
 let g:gitgutter_map_keys = 0
-let g:gitgutter_override_sign_column_highlight = 1
+let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_preview_win_floating = 1
 let g:gitgutter_sign_added = '▎'
 let g:gitgutter_sign_modified = '░'
@@ -158,6 +159,7 @@ let g:gitgutter_sign_modified_removed = '▒'
 "}}}
 
 " Plugin-COC{{{
+let g:coc_node_path='C:\Program Files (x86)\nodejs\node.exe'
 let g:pydiction_location='$VIM\vimfiles\ftplugin\complet-edict'
 set encoding=utf-8
 set hidden
@@ -172,14 +174,20 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
+"inoremap <silent><expr> <TAB>
+      "\ pumvisible() ? "\<C-n>" :
+      "\ <SID>check_back_space() ? "\<TAB>" :
+      "\ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+let g:coc_snippet_next = '<tab>'
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
@@ -213,7 +221,14 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 " auto install extentions 
-let g:coc_global_extensions = ['coc-json', 'coc-tsserver','coc-clangd','coc-python']
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver','coc-clangd','coc-python','coc-calc']
+
+" coc - calc
+" " append result on current expression
+" nmap <Leader>ca <Plug>(coc-calc-result-append)
+" replace result on current expression
+" nmap <Leader>cr <Plug>(coc-calc-result-replace)
+" 2 + 2 
 " }}} 
 
 " Plugin-vim-airline {{{
@@ -309,10 +324,6 @@ autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
 autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
 
   "" }}}
-
-" Plugin-Coc.VIM {{{
-let g:coc_node_path='C:\Program Files (x86)\nodejs\node.exe'
-" }}}
 
 " Plugin-auto-pairs {{{
 
@@ -413,7 +424,11 @@ autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 " }}}
 
 " Plugin-nerdtree {{{
-nnoremap <leader>nt :NERDTreeToggle<CR>
+nnoremap <leader>nt :call OpenCurrentDir()<CR>
+function! OpenCurrentDir()
+  execute "NERDTree"
+  execute "NERDTreeRefreshRoot"
+endfunction
 let NERDTreeShowBookmarks=1
 let NERDTreeShowHidden=1
 let NERDTreeWinPos="left"
@@ -428,7 +443,7 @@ let g:airline_powerline_fonts = 1
 let g:webdevicons_enable = 1
 let g:webdevicons_conceal_nerdtree_brackets = 0
 let g:webdevicons_enable_nerdtree = 0
-nnoremap <leader>ntf :NERDTreeFRefreshRoot<CR>
+nnoremap <leader>ntf :NERDTreeRefreshRoot<CR>
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'✹',
                 \ 'Staged'    :'✚',
