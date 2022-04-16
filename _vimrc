@@ -42,6 +42,7 @@ Plug 'honza/vim-snippets'
 Plug 'vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
 Plug 'connorholyday/vim-snazzy'
+Plug 'morhetz/gruvbox'
 Plug 'altercation/vim-colors-solarized'
 " Python
 Plug 'jiangmiao/auto-pairs'
@@ -173,21 +174,24 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
 "inoremap <silent><expr> <TAB>
-      "\ pumvisible() ? "\<C-n>" :
+      "\ pumvisible() ? coc#_select_confirm() :
+      "\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       "\ <SID>check_back_space() ? "\<TAB>" :
       "\ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
 let g:coc_snippet_next = '<tab>'
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
@@ -221,9 +225,11 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 " auto install extentions 
-let g:coc_global_extensions = ['coc-json', 'coc-tsserver','coc-clangd','coc-python','coc-calc']
+let g:coc_global_extensions = ['coc-json', 'coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc']
 
-" coc - calc
+" confirm choice <CR>
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " " append result on current expression
 " nmap <Leader>ca <Plug>(coc-calc-result-append)
 " replace result on current expression
@@ -466,9 +472,9 @@ set nocompatible
 set nobackup
 set noswapfile
 set history=1024
-set directory=D:\0-ROGAR\3-Code\0-Notes\vim-config\swp
-set backupdir=D:\0-ROGAR\3-Code\0-Notes\vim-config\backup
-set undodir=D:\0-ROGAR\3-Code\0-Notes\vim-config\un
+set directory=$HOME\.config\vim-config\swp
+set backupdir=$HOME\.config\vim-config\backup
+set undodir=$HOME\.config\vim-config\un
 set autochdir
 set whichwrap=b,s,<,>,[,]
 set nobomb
@@ -482,7 +488,6 @@ set winaltkeys=no
 " GUI {{{
 "colorscheme evening
 colorscheme snazzy
-syntax on
 syntax on
 let g:python_highlight_all = 1
 
@@ -561,6 +566,14 @@ noremap <leader>sl :set splitright<CR>:vsplit<CR>
 noremap <leader>sh :set nosplitright<CR>:vsplit<CR>
 noremap <leader>sk :set nosplitbelow<CR>:split<CR>
 noremap <leader>sj :set splitbelow<CR>:split<CR>
+
+" Buf Operate
+" 
+nmap <leader>bn :bnext<CR>
+nmap <leader>bp :bprevious<CR>
+nmap <leader>bf :bfirst<CR>
+nmap <leader>bl :blast<CR>
+
 " 移动分割窗口
 nmap <C-j> <C-W>j
 nmap <C-k> <C-W>k
