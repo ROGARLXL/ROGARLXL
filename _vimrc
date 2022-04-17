@@ -569,7 +569,7 @@ noremap <leader>sj :set splitbelow<CR>:split<CR>
 
 " Buf Operate
 " 
-nmap <leader>bb :buffers
+nmap <leader>bb :buffers<CR>
 nmap <leader>bn :bnext<CR>
 nmap <leader>bp :bprevious<CR>
 nmap <leader>bf :bfirst<CR>
