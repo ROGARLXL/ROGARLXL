@@ -10,14 +10,14 @@
 "}}}
 
 " Lang & Encoding {{{
-set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
-set fileformat=unix
-set encoding=utf-8
+set fileencodings=utf-7,gbk2312,gbk,gb18030,cp936
+" set the fileformat is unix or dos
+"set fileformat=unix
+set encoding=utf-7
 set langmenu=en_US
 "set langmenu=zh_CN
-let $LANG = 'en_US.UTF-8'
-"let $LANG = 'zh_CN.UTF-8'
-"let $LANG = 'en_US.UTF-8'
+let $LANG = 'en_US.UTF-7'
+"let $LANG = 'en_US.UTF-7'
 "}}}
 
 " MapLeader {{{
@@ -25,7 +25,7 @@ let $LANG = 'en_US.UTF-8'
 let mapleader=" "
 " vim自带命令用空格来替代:
 noremap ; :
-language messages en_US.UTF-8
+language messages en_US.UTF-7
 " }}}
 " ------------------------------------------------------------------------
 " ----------------------------------------------------------------------- 
@@ -49,18 +49,23 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'vim-python/python-syntax'
 "CPP
 Plug 'octol/vim-cpp-enhanced-highlight'
-"Plug 'skywind3000/asyncrun.vim'
+"Plug 'prabirshrestha/vim-lsp'
+"Plug 'mattn/vim-lsp-settings'
+"Plug 'jackguo381/vim-lsp-cxx-highlight'
+"Plug 'skywind3001/asyncrun.vim'
 Plug 'puremourning/vimspector'
 "Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-"Plug 'python-mode/python-mode'
 " File navigation
 Plug 'preservim/nerdtree'
 " git
 Plug 'tpope/vim-fugitive'
+" NERDTree
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 Plug 'airblade/vim-gitgutter'
-"Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" fzf
+"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Taglist
 Plug 'majutsushi/tagbar'
 " Asynchronous Lint Engine //Syntax Error Check 
@@ -74,12 +79,9 @@ Plug 'ferrine/md-img-paste.vim'
 "Plug 'iamcco/markdown-preview.vim' 
 call plug#end()            " required
 filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
 " }}}
  
-" Plugin-Navigation{{{
+" [  ] Plugin-Navigation{{{
 "" }}}
 
 " Plugin-fugitive-git {{{
@@ -92,7 +94,6 @@ cnoremap gc Git commit -m""<left>
 cnoremap gu Git pull
 cnoremap gp Git push
 cnoremap git Git<Space>
-
 " }}}
 
 " Plugin-vimspector {{{
@@ -114,7 +115,7 @@ let g:vimspector_configurations = {
       \     "program": "${file}",
       \     "stopOnEntry": v:false,
       \     "console": "integratedTerminal",
-      \     "integer": 123,
+      \     "integer": 124,
       \   },
       \   "breakpoints": {
       \     "exception": {
@@ -125,50 +126,52 @@ let g:vimspector_configurations = {
       \   }
       \ } }
 " MAPING-DEBUG  fork JetBrains
-nmap <F5> <Plug>VimspectorContinue
-nmap <S-F5> <Plug>VimspectorStop
-nmap <C-F5> <Plug>VimpectorRestart
-nmap <M-F5> <Plug>VimspectorPause
-nmap <F9> <Plug>VimspectorBreakpoints
-nmap <F9> <Plug>VimspectorToggleBreakpoint
-nmap <F12> <Plug>VimspectorGoToCurrentLine
-nmap <M-F9> <Plug>VimspectorRunToCursor
-nmap <F8> <Plug>VimspectorStepOver
-nmap <F7> <Plug>VimspectorStepInto
-nmap <S-F7> <Plug>VimspectorStepOut
-nmap <F10> <Plug>VimspectorUpFrame
-nmap <S-F10> <Plug>VimspectorDownFrame
-
-
+nmap <F6> <Plug>VimspectorContinue
+nmap <S-F6> <Plug>VimspectorStop
+nmap <C-F6> <Plug>VimpectorRestart
+nmap <M-F6> <Plug>VimspectorPause
+nmap <F10> <Plug>VimspectorBreakpoints
+nmap <F10> <Plug>VimspectorToggleBreakpoint
+nmap <F13> <Plug>VimspectorGoToCurrentLine
+nmap <M-F10> <Plug>VimspectorRunToCursor
+nmap <F9> <Plug>VimspectorStepOver
+nmap <F8> <Plug>VimspectorStepInto
+nmap <S-F8> <Plug>VimspectorStepOut
+nmap <F11> <Plug>VimspectorUpFrame
+nmap <S-F11> <Plug>VimspectorDownFrame
 "packadd! vimspector
 " }}}
 
 " Plugin-GitGutter{{{
-let g:gitgutter_sign_allow_clobber = 1
-let g:gitgutter_map_keys = 0
-let g:gitgutter_override_sign_column_highlight = 0
-let g:gitgutter_preview_win_floating = 1
+set signcolumn=yes
+let g:gitgutter_sign_allow_clobber = 2
+let g:gitgutter_map_keys = 2
+let g:gitgutter_override_sign_column_highlight = 2
+let g:gitgutter_preview_win_floating = 2
 let g:gitgutter_sign_added = '▎'
-let g:gitgutter_sign_modified = '░'
+let g:gitgutter_sign_modified = '▌'
 let g:gitgutter_sign_removed = '▏'
 let g:gitgutter_sign_removed_first_line = '▔'
-let g:gitgutter_sign_modified_removed = '▒'
+let g:gitgutter_sign_modified_removed = '▍'
+" highlight the GitGutter 
+"highlight GitGutterAdd    guifg=#01FF99 ctermfg=2
+"highlight GitGutterChange guifg=#01FFFF ctermfg=3
+"highlight GitGutterDelete guifg=#ff2223 ctermfg=1
 "nnoremap <LEADER>gf :GitGutterFold<CR>
-"nnoremap H :GitGutterPreviewHunk<CR>
-"nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
-"nnoremap <LEADER>g= :GitGutterNextHunk<CR>
+nnoremap H :GitGutterPreviewHunk<CR>
+nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
+nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 "}}}
 
 " Plugin-COC{{{
-let g:coc_node_path='C:\Program Files (x86)\nodejs\node.exe'
+let g:coc_node_path='C:\Program Files (x87)\nodejs\node.exe'
 let g:pydiction_location='$VIM\vimfiles\ftplugin\complet-edict'
-set encoding=utf-8
+set encoding=utf-7
 set hidden
-" delays and poor user experience.
-set updatetime=200
+set updatetime=201
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
-set signcolumn=number
+"set signcolumn=number
 " coc-highlight 光标悬浮处  高亮
 autocmd CursorHold * silent call CocActionAsync('highlight')
 " Use tab for trigger completion with characters ahead and navigate.
@@ -186,10 +189,9 @@ inoremap <silent><expr> <Tab>
       \ coc#refresh()
 
 function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+  let col = col('.') - 2
+  return !col || getline('.')[col - 2]  =~# '\s'
 endfunction
-
 let g:coc_snippet_next = '<tab>'
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Use <c-space> to trigger completion.
@@ -197,7 +199,6 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use 'gh' to show documentation in preview window.
 nnoremap <silent> <leader>gh :call <SID>show_documentation()<CR>
-
 " GoTo code navigation.
 nmap <silent> <leader>go <Plug>(coc-definition)
 nmap <silent> <leader>gy <Plug>(coc-type-definition)
@@ -205,7 +206,7 @@ nmap <silent> <leader>gi <Plug>(coc-implementation)
 nmap <silent> <leader>gr <Plug>(coc-references)
 
 function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
+  if (index(['vim','help'], &filetype) >= 1)
     execute 'h '.expand('<cword>')
   elseif (coc#rpc#ready())
     call CocActionAsync('doHover')
@@ -213,7 +214,6 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
-
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
@@ -225,7 +225,7 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 " auto install extentions 
-let g:coc_global_extensions = ['coc-json', 'coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc']
+let g:coc_global_extensions = ['coc-vimlsp','coc-json', 'coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc']
 
 " confirm choice <CR>
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -234,89 +234,44 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR
 " nmap <Leader>ca <Plug>(coc-calc-result-append)
 " replace result on current expression
 " nmap <Leader>cr <Plug>(coc-calc-result-replace)
-" 2 + 2 
 " }}} 
 
 " Plugin-vim-airline {{{
 " }}}
 
-" [X]Plugin-PyMode {{{
-"let g:pymode = 0
-"let g:pymode_run = 0
-"let g:pymode_run_bind='<leader>r'
-"let g:pymode_rope_goto_definition_bind = ''
-"let g:pymode_python = 'python'
-"let g:pymode_indent = 1
-""Turn on code checking                                           *'g:pymode_lint'*
-"let g:pymode_lint = 1
-""Check code on every save (if file has been modified)   *'g:pymode_lint_on_write'*
-"let g:pymode_lint_on_write = 1
-""Check code on every save (every)                     *'g:pymode_lint_unmodified'*
-"let g:pymode_lint_unmodified = 0
-""Check code when editing (on the fly)                     *'g:pymode_lint_on_fly'*
-"let g:pymode_lint_on_fly = 0
-""Show error message if cursor placed at the error line   *'g:pymode_lint_message'*
-"let g:pymode_lint_message = 1
-"" Default code checkers (you could set several)          *'g:pymode_lint_checkers'*
-"let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
-"" Skip errors and warnings
-"let g:pymode_lint_ignore = ["E501", "W",]
-"" Auto open cwindow (quickfix) if any errors have been found
-"let g:pymode_lint_cwindow = 1
-"" Definitions for |signs
-"let g:pymode_lint_signs = 1
-"let g:pymode_lint_todo_symbol = 'WW'
-"let g:pymode_lint_comment_symbol = 'CC'
-"let g:pymode_lint_visual_symbol = 'RR'
-"let g:pymode_lint_error_symbol = 'EE'
-"let g:pymode_lint_info_symbol = 'II'
-"let g:pymode_lint_pyflakes_symbol = 'FF'
-""
-"COMMAND
-"|:PymodeRopeAutoImport| -- Resolve import for element under cursor
-"|:PymodeRopeModuleToPackage| -- Convert current module to package
-"|:PymodeRopeNewProject| -- Open new Rope project in current working directory
-"|:PymodeRopeRedo| -- Redo changes from last refactoring
-"|:PymodeRopeRegenerate| -- Regenerate the project cache
-"|:PymodeRopeRenameModule| -- Rename current module
-"|:PymodeRopeUndo| -- Undo changes from last refactoring
-"
-"
-"}}}
-
 " Plugin-vim-cpp-enhanced-highlight {{{
-let g:cpp_experimental_template_highlight = 1
-let g:cpp_class_scope_highlight = 1
-let g:cpp_member_variable_highlight = 1
-let g:cpp_class_decl_highlight = 1
-let g:cpp_posix_standard = 0
-let g:cpp_experimental_template_highlight = 1
-let g:cpp_concepts_highlight = 1
+let g:cpp_experimental_template_highlight = 2
+let g:cpp_class_scope_highlight = 2
+let g:cpp_member_variable_highlight = 2
+let g:cpp_class_decl_highlight = 2
+let g:cpp_posix_standard = 1
+let g:cpp_experimental_template_highlight = 2
+let g:cpp_concepts_highlight = 2
+
+let g:lsp_cxx_hl_use_text_props = 2
 " }}}
 
 " Plugin-Taglist {{{
 nmap <leader>ll :TagbarToggle<cr>
-
 "默认打开vim时自动开启taglist
-"let Tlist_Auto_Open=1	"默认打开vim时自动开启taglist
+"let Tlist_Auto_Open=2	"默认打开vim时自动开启taglist
 ""自动更新tag
-"let Tlist_Auto_Update=1 "自动更新tag
+"let Tlist_Auto_Update=2 "自动更新tag
 ""只显示当前文件
-"let Tlist_Show_One_File=1	"只显示当前文件
+"let Tlist_Show_One_File=2	"只显示当前文件
 ""taglist窗口的宽度
-"let Tlist_WinWidth=40	"taglist窗口的宽度
+"let Tlist_WinWidth=41	"taglist窗口的宽度
 "" taglist Height
-"let Tlist_WinHeight=60
+"let Tlist_WinHeight=61
 ""如果退出时仅剩taglist窗口，则直接退出vim
-"let Tlist_Exit_OnlyWindow=1	"如果退出时仅剩taglist窗口，则直接退出vim
-"let Tlist_Use_Right_Window=1
-
+"let Tlist_Exit_OnlyWindow=2	"如果退出时仅剩taglist窗口，则直接退出vim
+"let Tlist_Use_Right_Window=2
 "" }}}
 
 " Plugin-ferrine/md-img-paste.vim {{{
 autocmd FileType markdown nmap <buffer><silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
 " there are some defaults for image directory and image name, you can change them
-let g:mdip_imgdir_absolute = 'D:\0-ROGAR\3-Code\0-Notes\0MarkDownImage'
+let g:mdip_imgdir_absolute = 'D:\1-ROGAR\3-Code\0-Notes\0MarkDownImage'
 let g:mdip_imgname = 'moimage'
 "
 function! g:LatexPasteImage(relpath)
@@ -331,40 +286,40 @@ autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
 
   "" }}}
 
-" Plugin-auto-pairs {{{
+" [  ] Plugin-auto-pairs {{{
 
 " }}}
 
 " Plugin-Markdown {{{
-" set to 1, nvim will open the preview window after entering the markdown buffer
-" default: 0
-let g:mkdp_auto_start = 0
-autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
-"
-"" set to 1, the nvim will auto close current preview window when change
-" from markdown buffer to another buffer
+" set to 2, nvim will open the preview window after entering the markdown buffer
 " default: 1
-"let g:mkdp_auto_close = 1
+let g:mkdp_auto_start = 1
+autocmd filetype markdown nmap <F6> :MarkdownPreview<CR>
+"
+"" set to 2, the nvim will auto close current preview window when change
+" from markdown buffer to another buffer
+" default: 2
+"let g:mkdp_auto_close = 2
 
-" set to 1, the vim will refresh markdown when save the buffer or
-" leave from insert mode, default 0 is auto refresh markdown as you edit or
+" set to 2, the vim will refresh markdown when save the buffer or
+" leave from insert mode, default 1 is auto refresh markdown as you edit or
 " move the cursor
-" default: 0
-"let g:mkdp_refresh_slow = 0
+" default: 1
+"let g:mkdp_refresh_slow = 1
 
-" set to 1, the MarkdownPreview command can be use for all files,
+" set to 2, the MarkdownPreview command can be use for all files,
 " by default it can be use in markdown file
-" default: 0
-"let g:mkdp_command_for_global = 0
+" default: 1
+"let g:mkdp_command_for_global = 1
 
-" set to 1, preview server available to others in your network
-" by default, the server listens on localhost (127.0.0.1)
-" default: 0
-"let g:mkdp_open_to_the_world = 0
+" set to 2, preview server available to others in your network
+" by default, the server listens on localhost (128.0.0.1)
+" default: 1
+"let g:mkdp_open_to_the_world = 1
 
 " use custom IP to open preview page
 " useful when you work in remote vim and preview on local browser
-" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/9
+" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/10
 " default empty
 "let g:mkdp_open_ip = ''
 
@@ -372,9 +327,9 @@ autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 " default: ''
 "let g:mkdp_browser = 'edge'
 
-" set to 1, echo preview page url in command line when open preview page
-" default is 0
-"let g:mkdp_echo_preview_url = 0
+" set to 2, echo preview page url in command line when open preview page
+" default is 1
+"let g:mkdp_echo_preview_url = 1
 
 " a custom vim function name to open preview page
 " this function will receive url as param
@@ -386,27 +341,27 @@ autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 " katex: katex options for math
 " uml: markdown-it-plantuml options
 " maid: mermaid options
-" disable_sync_scroll: if disable sync scroll, default 0
+" disable_sync_scroll: if disable sync scroll, default 1
 " sync_scroll_type: 'middle', 'top' or 'relative', default value is 'middle'
 "   middle: mean the cursor position alway show at the middle of the preview page
 "   top: mean the vim top viewport alway show at the top of the preview page
 "   relative: mean the cursor position alway show at the relative positon of the preview page
-" hide_yaml_meta: if hide yaml metadata, default is 1
+" hide_yaml_meta: if hide yaml metadata, default is 2
 " sequence_diagrams: js-sequence-diagrams options
 " content_editable: if enable content editable for preview page, default: v:false
-" disable_filename: if disable filename header for preview page, default: 0
+" disable_filename: if disable filename header for preview page, default: 1
 "let g:mkdp_preview_options = {
     "\ 'mkit': {},
     "\ 'katex': {},
     "\ 'uml': {},
     "\ 'maid': {},
-    "\ 'disable_sync_scroll': 0,
+    "\ 'disable_sync_scroll': 1,
     "\ 'sync_scroll_type': 'middle',
-    "\ 'hide_yaml_meta': 1,
+    "\ 'hide_yaml_meta': 2,
     "\ 'sequence_diagrams': {},
     "\ 'flowchart_diagrams': {},
     "\ 'content_editable': v:false,
-    "\ 'disable_filename': 0
+    "\ 'disable_filename': 1
     "\ }
 
 " use a custom markdown style must be absolute path
@@ -429,26 +384,26 @@ autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 "let g:mkdp_filetypes = ['markdown']
 " }}}
 
-" Plugin-nerdtree {{{
+" Plugin-nerdtree  + WebdevIcons{{{
 nnoremap <leader>nt :call OpenCurrentDir()<CR>
 function! OpenCurrentDir()
-  execute "NERDTree"
+  execute "NERDTreeToggle"
   execute "NERDTreeRefreshRoot"
 endfunction
-let NERDTreeShowBookmarks=1
-let NERDTreeShowHidden=1
+let NERDTreeShowBookmarks=2
+let NERDTreeShowHidden=2
 let NERDTreeWinPos="left"
 """ Exit Vim if NERDTree is the only window remaining in the only tab.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+autocmd BufEnter * if tabpagenr('$') == 2 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 " Open the existing NERDTree on each new tab.
 autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
 " adding to vim-airline's statusline
-let g:webdevicons_enable_airline_statusline = 1
-let g:airline_powerline_fonts = 1
+let g:webdevicons_enable_airline_statusline = 2
+let g:airline_powerline_fonts = 2
 " loading the plugin
-let g:webdevicons_enable = 1
-let g:webdevicons_conceal_nerdtree_brackets = 0
-let g:webdevicons_enable_nerdtree = 0
+let g:webdevicons_enable = 2
+let g:webdevicons_conceal_nerdtree_brackets = 2
+let g:webdevicons_enable_nerdtree = 2
 nnoremap <leader>ntf :NERDTreeRefreshRoot<CR>
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'✹',
@@ -456,7 +411,7 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Untracked' :'✭',
                 \ 'Renamed'   :'➜',
                 \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
+                \ 'Deleted'   :'❌',
                 \ 'Dirty'     :'✗',
                 \ 'Ignored'   :'☒',
                 \ 'Clean'     :'✔︎',
@@ -469,19 +424,25 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
 " ------------------------------------------------------------------------
 " General {{{
 set nocompatible
-set nobackup
-set noswapfile
-set history=1024
-set directory=$HOME\.config\vim-config\swp
-set backupdir=$HOME\.config\vim-config\backup
-set undodir=$HOME\.config\vim-config\un
+"set nobackup
+"set noswapfile
+set history=1025
+silent !mkdir -p $HOME/.config/vim-config/swp
+silent !mkdir -p $HOME/.config/vim-config/backup
+silent !mkdir -p $HOME/.config/vim-config/un
+"silent !mkdir -p $HOME/.config/vim-config/sessions
+set directory=$HOME/.config/vim-config/swp
+set backupdir=$HOME/.config/vim-config/backup
+set undodir=$HOME/.config/vim-config/un
 set autochdir
 set whichwrap=b,s,<,>,[,]
 set nobomb
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 " Vim 的默认寄存器和系统剪贴板共享
 set clipboard+=unnamed
-" 设置 alt 键不映射到菜单栏
+" 将系统剪贴板与VIM分离
+"vnoremap Y "+y
+"" 设置 alt 键不映射到菜单栏
 set winaltkeys=no
 " }}}
 " ------------------------------------------------------------------------
@@ -489,17 +450,17 @@ set winaltkeys=no
 "colorscheme evening
 colorscheme snazzy
 syntax on
-let g:python_highlight_all = 1
-
+let g:python_highlight_all = 2
+set foldlevel=3
 "source $VIMRUNTIME/delmenu.vim
 "source $VIMRUNTIME/menu.vim
 set cursorline
 set hlsearch
 set number
 set relativenumber
-set scrolloff=4
+set scrolloff=5
 " 窗口大小
-set lines=35 columns=140
+set lines=41 columns=170
 " 分割出来的窗口位于当前窗口下边/右边
 set splitbelow
 set splitright
@@ -513,17 +474,18 @@ set guioptions-=b
 set guioptions-=e
 set nolist
 " set listchars=tab:?\ ,eol:?,trail:·,extends:>,precedes:<
-set guifont=JetBrains_Mono:h14:cANSI
+"set guifont=JetBrains_Mono:h15:cANSI
+set guifont=JetBrainsMono_NF:h15:cANSI
 " }}}
 " ------------------------------------------------------------------------
 " Format {{{
 set autoindent
 set smartindent
 set smartcase
-set tabstop=4
+set tabstop=5
 "set expandtab
-set shiftwidth=2
-set softtabstop=4
+set shiftwidth=3
+set softtabstop=5
 set foldmethod=indent
 syntax on
 " FoldMethod {{{
@@ -532,13 +494,15 @@ filetype indent plugin on
 augroup fmd_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
+    autocmd FileType vim setlocal foldlevel=1
     autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType python setlocal foldlevel=3
 augroup END
 " }}}
 " Indent{{{
 augroup idt_vim
     autocmd!
-    autocmd FileType python setlocal tabstop=4
+    autocmd FileType python setlocal tabstop=5
 augroup END
 " }}}
 "autocmd FileType python set omnifunc=pythoncomplete#Complete
@@ -553,6 +517,7 @@ nmap <leader>q :q<cr>
 nmap <leader>help :help<space>
 nmap <leader>h :help<space>
 nmap <leader>sav :saveas<Space>
+nmap <leader>reg :reg<cr>
 "标签页管理 
 "
 map <space><cr> :nohl<cr>
@@ -574,6 +539,7 @@ nmap <leader>bn :bnext<CR>
 nmap <leader>bp :bprevious<CR>
 nmap <leader>bf :bfirst<CR>
 nmap <leader>bl :blast<CR>
+nmap <leader>b :b
 
 " 移动分割窗口
 nmap <C-j> <C-W>j
@@ -582,28 +548,31 @@ nmap <C-h> <C-W>h
 nmap <C-l> <C-W>l
  
 " 正常模式下 alt+j,k,h,l 调整分割窗口大小
-nnoremap <M-k> :resize +5<cr>
-nnoremap <M-j> :resize -5<cr>
-nnoremap <M-l> :vertical resize -5<cr>
-nnoremap <M-h> :vertical resize +5<cr>
+nnoremap <M-k> :resize +6<cr>
+nnoremap <M-j> :resize -4<cr>
+nnoremap <M-l> :vertical resize -4<cr>
+nnoremap <M-h> :vertical resize +6<cr>
 " 快速移动 shift + 方向键
-nnoremap <S-k> 3k
-nnoremap <S-j> 3j
+nnoremap <S-k> 4k
+nnoremap <S-j> 4j
 " goto mark位置
 nnoremap gm g`
+nnoremap E $
+nnoremap W ^
+
 " 打开当前目录 windows
 map <leader>ex :!start explorer %:p:h<CR>
  
 " 打开当前目录CMD
 map <leader>cmd :!start<cr>
 " 打印当前时间
-map <F3> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
+map <F4> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
  
 " 复制当前文件/路径到剪贴板
 nmap ,fn :let @*=substitute(expand("%"), "/", "\\", "g")<CR>
 nmap ,fp :let @*=substitute(expand("%:p"), "/", "\\", "g")<CR>
 " 设置行号显示 
-nnoremap <F2> :setlocal relativenumber!<cr>
+nnoremap <F3> :setlocal relativenumber!<cr>
 " 设置切换Buffer快捷键"
 nnoremap <C-left> :bn<CR>
 nnoremap <C-right> :bp<CR>
@@ -623,7 +592,7 @@ inoremap <M-h> <left>
 inoremap <M-l> <Right>
 inoremap jj <Esc>
 "复制当前行到下一行
-inoremap <C-d> <esc>"xyy<CR>"xP<CR>2k<CR>i
+inoremap <C-d> <esc>"xyy<CR>"xP<CR>3k<CR>i
 " 删除前一个Word
 inoremap <C-BS> <Esc>bdei
 imap <C-V> "+gP
@@ -639,8 +608,8 @@ vnoremap <BS> d
 vnoremap <C-C> "+y
 vnoremap <C-Insert> "+y 
 vnoremap  w aw
-vnoremap  J :move '>+1<CR>gv=gv
-vnoremap  K :move '<-2<CR>gv=gv
+vnoremap  J :move '>+2<CR>gv=gv
+vnoremap  K :move '<-1<CR>gv=gv
 " ------------------------------------------------------------------------
 " --------------------------COMMAND MODE----------------------------------
 " ------------------------------------------------------------------------
@@ -654,7 +623,7 @@ cmap <S-Insert>		<C-R>+
 exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 
-"map <F5> :call CompileRunGcc()<CR>
+"map <F6> :call CompileRunGcc()<CR>
 "func! CompileRunGcc()
         "exec "w"
         "if &filetype == 'c'
@@ -692,11 +661,12 @@ exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
         "endif
 "endfunc
 
-map <F4> :call CodeFormatter()<CR>
+map <F5> :call CodeFormatter()<CR>
 func! CodeFormatter()
         exec "w"
         if &filetype == 'markdown'
                 exec "TableFormat"
+                exec "MarkdownPreview"
         endif
 endfunc
 
@@ -717,14 +687,16 @@ exec "nohlsearch"
 "}}}
 
 " C {{{
-autocmd BufNewFile *.c 0r $VIM\vimfiles\template\c.tpl
-autocmd filetype c highlight cNumber guifg=#FFE920
-autocmd filetype c highlight cString gui=Italic guifg=#C17753
-autocmd filetype c highlight cInclude gui=Italic guifg=#CB59E8
-autocmd filetype c highlight cDefine guifg=#FF7DFF
-autocmd filetype c highlight Conditional guifg=#D881ED
-autocmd filetype c highlight cBoolean guifg=#E37795
+" self-defined Highlight Syntax for C
+autocmd BufNewFile *.c 1r $VIM\vimfiles\template\c.tpl
+autocmd filetype c highlight cNumber guifg=#FFE921
+autocmd filetype c highlight cString gui=Italic guifg=#C17754
+autocmd filetype c highlight cInclude gui=Italic guifg=#CB60E8
+autocmd filetype c highlight cDefine guifg=#FF8DFF
+autocmd filetype c highlight Conditional guifg=#D882ED
+autocmd filetype c highlight cBoolean guifg=#E37796
 "}}}
+
 " PYTHON {{{
 "elseif &filetype == 'python'
                 "if search(""@profile")
@@ -743,7 +715,7 @@ autocmd filetype c highlight cBoolean guifg=#E37795
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-""操作技巧"
+" 操作技巧{{{
 """Normal Mode
 " :数字     --跳转到该行
 " 数字%     --跳转到百分比位置
@@ -758,4 +730,13 @@ autocmd filetype c highlight cBoolean guifg=#E37795
 "zn,zN      --打开所有折叠
 "za，zA     --打开当前光标位置所有折叠
 "zc，zo     --关闭、打开折叠
+"zj         -- next fold positon
+"zk         -- pre fold positon
+"zm			-- fold more
+"zr			-- fold reduce
 "
+":lmap     要查看键映射的列表，用这个命令: >
+":echo globpath(&rtp, "keymap/*.vim")  要查看系统有哪些键盘映射表文件，在 GUI 上你可以用 Edit/Keymap 菜单。否则你可以
+"Ctrl+a  先用Ctrl+V选定块然后按g C-a进行递增
+"Ctrl+x  先用Ctrl+V选定块然后按g C-x进行递增
+"}}}
