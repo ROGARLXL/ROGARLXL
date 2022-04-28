@@ -55,7 +55,7 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 "Plug 'mattn/vim-lsp-settings'
 "Plug 'jackguo381/vim-lsp-cxx-highlight'
 "Plug 'skywind3000/asyncrun.vim'
-Plug 'puremourning/vimspector'
+Plug 'puremourning/vimspector',{'do':'./install_gadget.py --all'}
 "Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " File navigation
 Plug 'preservim/nerdtree'
@@ -105,7 +105,8 @@ cnoremap git Git<Space>
 let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
 let g:vimspector_adapters = #{
-      \   test_debugpy: #{ extends: 'debugpy' }
+      \   test_debugpy: #{ extends: 'debugpy' },
+      \   test_cpp: #{ extends: 'vscode-cpptools' }
       \ }
 
 let g:vimspector_configurations = {
@@ -129,8 +130,56 @@ let g:vimspector_configurations = {
       \       "userUnhandled": ""
       \     }
       \   }
-      \ } }
+      \ },
+	  \ "test_cpp_config": {
+      \   "adapter": "vscode-cpptools",
+      \   "filetypes": [ "cpp", "c", "objc", "rust"],
+	  \   "configuration": {
+	  \		"request": "launch",
+	  \		"program": "./debug_C_vimspector",
+	  \		"stopAtEntry": v:true
+	  \	}
+      \ }
+	  \ }
+
 " MAPING-DEBUG  fork JetBrains
+
+"autocmd FileType c nmap <F5> :call CompileRunGcc()<CR>
+map <F6> :call CompileFunc()<CR>
+func! CompileFunc()
+        exec "w"
+        if &filetype == 'c'
+                exec "!gcc -g % -o debug_C_vimspector"
+        elseif &filetype == 'cpp'
+                exec "!g++ % -o %<"
+                exec "!time ./%<"
+        elseif &filetype == 'java'
+                exec "!javac %"
+                exec "!time java %<"
+        elseif &filetype == 'sh'
+                :!time bash %
+        elseif &filetype == 'html'
+                exec "!firefox % &"
+        elseif &filetype == 'go'
+                exec "!go build %<"
+                exec "!time go run %"
+        "elseif &filetype == 'python'
+            "if search("@profile")
+                "exec "AsyncRun kernprof -l -v %"
+                "exec "copen"
+                "exec "wincmd p"
+            "elseif search("set_trace()")
+                "exec "!python %"
+            "else
+                "exec "AsyncRun -raw python %"
+                "exec "copen"
+                "exec "wincmd p"
+            "endif
+        elseif &filetype == 'markdown'
+                exec "MarkdownPreview"
+        endif
+endfunc
+
 nmap <F5> <Plug>VimspectorContinue
 nmap <S-F5> <Plug>VimspectorStop
 nmap <C-F5> <Plug>VimpectorRestart
@@ -145,7 +194,9 @@ nmap <S-F7> <Plug>VimspectorStepOut
 nmap <F10> <Plug>VimspectorUpFrame
 nmap <S-F10> <Plug>VimspectorDownFrame
 
-
+"sign define vimspectorBP text=☛ texthl=Normal
+"sign define vimspectorBPDisabled text=☞ texthl=Normal
+sign define vimspectorPC text=🔶 texthl=Normal
 "packadd! vimspector
 " }}}
 
@@ -542,6 +593,7 @@ nmap <leader>sav :saveas<Space>
 nmap <leader>reg :reg<cr>
 "标签页管理 
 "
+"
 map <space><cr> :nohl<cr>
 map <leader>tn :tabnew<cr>
 map <leader>tc :tabclose<cr>
@@ -645,43 +697,6 @@ cmap <S-Insert>		<C-R>+
 exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 
-"map <F5> :call CompileRunGcc()<CR>
-"func! CompileRunGcc()
-        "exec "w"
-        "if &filetype == 'c'
-                "exec "!gcc % -o %<"
-                "exec "AsyncRun -raw %<"
-                "exec "copen"
-                "exec "wincmd p" 
-        "elseif &filetype == 'cpp'
-                "exec "!g++ % -o %<"
-                "exec "!time ./%<"
-        "elseif &filetype == 'java'
-                "exec "!javac %"
-                "exec "!time java %<"
-        "elseif &filetype == 'sh'
-                ":!time bash %
-        "elseif &filetype == 'html'
-                "exec "!firefox % &"
-        "elseif &filetype == 'go'
-                "exec "!go build %<"
-                "exec "!time go run %"
-        "elseif &filetype == 'python'
-            "if search("@profile")
-                "exec "AsyncRun kernprof -l -v %"
-                "exec "copen"
-                "exec "wincmd p"
-            "elseif search("set_trace()")
-                "exec "!python %"
-            "else
-                "exec "AsyncRun -raw python %"
-                "exec "copen"
-                "exec "wincmd p"
-            "endif
-        "elseif &filetype == 'markdown'
-                "exec "MarkdownPreview"
-        "endif
-"endfunc
 
 map <F4> :call CodeFormatter()<CR>
 func! CodeFormatter()
@@ -691,7 +706,6 @@ func! CodeFormatter()
                 exec "MarkdownPreview"
         endif
 endfunc
-
 
 " ============================ Necessary Commands to Execute ====================
 exec "nohlsearch"
