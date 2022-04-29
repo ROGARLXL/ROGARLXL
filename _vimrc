@@ -55,8 +55,9 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 "Plug 'mattn/vim-lsp-settings'
 "Plug 'jackguo381/vim-lsp-cxx-highlight'
 "Plug 'skywind3000/asyncrun.vim'
-Plug 'puremourning/vimspector',{'do':'./install_gadget.py --all'}
-"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'puremourning/vimspector'
+"Plug 'puremourning/vimspector',{'do':'./install_gadget.py --all'}
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " File navigation
 Plug 'preservim/nerdtree'
 " git
