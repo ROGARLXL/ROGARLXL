@@ -57,7 +57,7 @@ Plug 'octol/vim-cpp-enhanced-highlight'
 "Plug 'skywind3000/asyncrun.vim'
 Plug 'puremourning/vimspector'
 "Plug 'puremourning/vimspector',{'do':'./install_gadget.py --all'}
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " File navigation
 Plug 'preservim/nerdtree'
 " git
@@ -352,7 +352,7 @@ autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
 " Plugin-Markdown {{{
 " set to 1, nvim will open the preview window after entering the markdown buffer
 " default: 0
-let g:mkdp_auto_start = 1
+let g:mkdp_auto_start = 0
 autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 "
 "" set to 1, the nvim will auto close current preview window when change
@@ -512,6 +512,7 @@ set autochdir
 set whichwrap=b,s,<,>,[,]
 set nobomb
 set backspace=indent,eol,start whichwrap+=<,>,[,]
+set wildmenu
 " Vim 的默认寄存器和系统剪贴板共享
 set clipboard+=unnamed
 " 将系统剪贴板与VIM分离
@@ -699,7 +700,7 @@ exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 
 
-map <F4> :call CodeFormatter()<CR>
+nmap <F4> :call CodeFormatter()<CR>
 func! CodeFormatter()
         exec "w"
         if &filetype == 'markdown'
