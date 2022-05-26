@@ -89,7 +89,9 @@ filetype indent plugin on
 augroup fmd_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
+    autocmd FileType vim setlocal foldlevel=0
     autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType python setlocal foldlevel=3
 augroup END
 " }}}
 " Indent{{{
@@ -109,6 +111,8 @@ nmap <leader>wq :wq<cr>
 nmap <leader>q :q<cr>
 nmap <leader>help :help<space>
 nmap <leader>h :help<space>
+nmap <leader>sav :saveas<Space>
+nmap <leader>reg :reg<cr>
 "标签页管理 
 "
 map <space><cr> :nohl<cr>
@@ -122,6 +126,16 @@ noremap <leader>sl :set splitright<CR>:vsplit<CR>
 noremap <leader>sh :set nosplitright<CR>:vsplit<CR>
 noremap <leader>sk :set nosplitbelow<CR>:split<CR>
 noremap <leader>sj :set splitbelow<CR>:split<CR>
+
+" Buf Operate
+" 
+nmap <leader>bb :buffers<CR>
+nmap <leader>bn :bnext<CR>
+nmap <leader>bp :bprevious<CR>
+nmap <leader>bf :bfirst<CR>
+nmap <leader>bl :blast<CR>
+nmap <leader>b :b
+
 " 移动分割窗口
 nmap <C-j> <C-W>j
 nmap <C-k> <C-W>k
@@ -197,3 +211,34 @@ cmap <S-Insert>		<C-R>+
 " 常规操作-复制、黏贴、选择 CO/PY CUT PASTE SELETED
 exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
+
+"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+" 操作技巧{{{
+"""Normal Mode
+" :数字     --跳转到该行
+" 数字%     --跳转到百分比位置
+" gE        --回到上一个单词
+" %         --跳转到匹配的括号
+"aw         --'a word' select choice
+"iw         --'inner word' select choice
+"ap         --'a paragragh'
+"ip         --'inner paragraph'
+"           --'a' including identifier,but 'inner' not
+"           --'w':word  'p':paragragh   'b':block   '()' [] {}
+"zn,zN      --打开所有折叠
+"za，zA     --打开当前光标位置所有折叠
+"zc，zo     --关闭、打开折叠
+"zj         -- next fold positon
+"zk         -- pre fold positon
+"zm			-- fold more
+"zr			-- fold reduce
+"
+":lmap     要查看键映射的列表，用这个命令: >
+":echo globpath(&rtp, "keymap/*.vim")  要查看系统有哪些键盘映射表文件，在 GUI 上你可以用 Edit/Keymap 菜单。否则你可以
+"Ctrl+a  先用Ctrl+V选定块然后按g C-a进行递增
+"Ctrl+x  先用Ctrl+V选定块然后按g C-x进行递增
+":verbose map <key> 查看key的映射位置
+"}}}
+
