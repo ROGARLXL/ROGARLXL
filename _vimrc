@@ -16,7 +16,7 @@ set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
 set encoding=utf-8
 set langmenu=en_US
 "set langmenu=zh_CN
-let $LANG = 'en_US.UTF-8'
+"let $LANG = 'en_US.UTF-8'
 "let $LANG = 'zh_CN.UTF-8'
 "let $LANG = 'en_US.UTF-8'
 "}}}
@@ -34,6 +34,7 @@ language messages en_US.UTF-8
 filetype off
 "set shellslash
 set rtp+=$VIM/vimfiles/bundle/Vundle.vim
+set rtp+=C:\ProgramData\chocolatey\bin
 call plug#begin('$VIM/vimfiles/bundle/')
 " AutoComplete
 "Plug 'Valloric/YoucompleteMe'
@@ -68,7 +69,10 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'airblade/vim-gitgutter'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " fzf
-"Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf',
+Plug 'junegunn/fzf.vim',
+" vim-easymotion
+Plug 'easymotion/vim-easymotion'
 " Taglist
 Plug 'majutsushi/tagbar'
 " Asynchronous Lint Engine //Syntax Error Check 
@@ -80,6 +84,13 @@ Plug 'iamcco/mathjax-support-for-mkdp'
 Plug 'iamcco/markdown-preview.nvim' 
 Plug 'ferrine/md-img-paste.vim'
 "Plug 'iamcco/markdown-preview.vim' 
+
+" commentary
+" Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdcommenter'
+" mult-cursor
+Plug 'terryma/vim-multiple-cursors'
+
 call plug#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
@@ -102,8 +113,95 @@ cnoremap gp Git push
 cnoremap git Git<Space>
 " }}}
 
+" Plugin-FZF{{{
+nnoremap <leader>f :FZF<CR>
+nnoremap <leader>fa :FZF<space>
+"}}}
+
+" Plugin-nerdcommenter{{{
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
+
+" [count]<leader>cc |NERDCommenterComment|
+"
+" Comment out the current line or text selected in visual mode.
+"
+" [count]<leader>cn |NERDCommenterNested|
+"
+" Same as cc but forces nesting.
+"
+" [count]<leader>c<space> |NERDCommenterToggle|
+"
+" Toggles the comment state of the selected line(s). If the topmost selected line is commented, all selected lines are uncommented and vice versa.
+"
+" [count]<leader>cm |NERDCommenterMinimal|
+"
+" Comments the given lines using only one set of multipart delimiters.
+"
+" [count]<leader>ci |NERDCommenterInvert|
+"
+" Toggles the comment state of the selected line(s) individually.
+"
+" [count]<leader>cs |NERDCommenterSexy|
+"
+" Comments out the selected lines with a pretty block formatted layout.
+"
+" [count]<leader>cy |NERDCommenterYank|
+"
+" Same as cc except that the commented line(s) are yanked first.
+"
+" <leader>c$ |NERDCommenterToEOL|
+"
+" Comments the current line from the cursor to the end of line.
+"
+" <leader>cA |NERDCommenterAppend|
+"
+" Adds comment delimiters to the end of line and goes into insert mode between them.
+"
+" |NERDCommenterInsert|
+"
+" Adds comment delimiters at the current cursor position and inserts between. Disabled by default.
+"
+" <leader>ca |NERDCommenterAltDelims|
+"
+" Switches to the alternative set of delimiters.
+"
+" [count]<leader>cl |NERDCommenterAlignLeft [count]<leader>cb |NERDCommenterAlignBoth
+"
+" Same as |NERDCommenterComment| except that the delimiters are aligned down the left side (<leader>cl) or both sides (<leader>cb).
+"
+" [count]<leader>cu |NERDCommenterUncomment|
+"
+" Uncomments the selected line(s).
+
+"""}}}
+
 " Plugin-vimspector {{{
-let g:vimspector_enable_mappings = 'HUMAN'
+"let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
 let g:vimspector_adapters = #{
       \   test_debugpy: #{ extends: 'debugpy' },
@@ -144,9 +242,21 @@ let g:vimspector_configurations = {
 	  \ }
 
 " MAPING-DEBUG  fork JetBrains
+nmap <F5> <Plug>VimspectorContinue
+nmap <S-F5> <Plug>VimspectorStop
+nmap <C-F5> <Plug>VimpectorRestart
+nmap <M-F5> <Plug>VimspectorPause
+"nmap <F9> <Plug>VimspectorBreakpoints
+nmap <F9> <Plug>VimspectorToggleBreakpoint
+nmap <F12> <Plug>VimspectorGoToCurrentLine
+nmap <M-F9> <Plug>VimspectorRunToCursor
+nmap <F8> <Plug>VimspectorStepOver
+nmap <F7> <Plug>VimspectorStepInto
+nmap <S-F7> <Plug>VimspectorStepOut
+nmap <F10> <Plug>VimspectorUpFrame
+nmap <S-F10> <Plug>VimspectorDownFrame
 
-"autocmd FileType c nmap <F5> :call CompileRunGcc()<CR>
-map <F6> :call CompileFunc()<CR>
+nmap <F6> :call CompileFunc()<CR>
 func! CompileFunc()
         exec "w"
         if &filetype == 'c'
@@ -181,20 +291,6 @@ func! CompileFunc()
         endif
 endfunc
 
-nmap <F5> <Plug>VimspectorContinue
-nmap <S-F5> <Plug>VimspectorStop
-nmap <C-F5> <Plug>VimpectorRestart
-nmap <M-F5> <Plug>VimspectorPause
-"nmap <F9> <Plug>VimspectorBreakpoints
-nmap <F9> <Plug>VimspectorToggleBreakpoint
-nmap <F12> <Plug>VimspectorGoToCurrentLine
-nmap <M-F9> <Plug>VimspectorRunToCursor
-nmap <F8> <Plug>VimspectorStepOver
-nmap <F7> <Plug>VimspectorStepInto
-nmap <S-F7> <Plug>VimspectorStepOut
-nmap <F10> <Plug>VimspectorUpFrame
-nmap <S-F10> <Plug>VimspectorDownFrame
-
 "sign define vimspectorBP text=☛ texthl=Normal
 "sign define vimspectorBPDisabled text=☞ texthl=Normal
 sign define vimspectorPC text=🔶 texthl=Normal
@@ -212,7 +308,7 @@ let g:gitgutter_sign_modified = '▌'
 let g:gitgutter_sign_removed = '▏'
 let g:gitgutter_sign_removed_first_line = '▔'
 let g:gitgutter_sign_modified_removed = '▍'
-" highlight the GitGutter 
+"highlight the GitGutter 
 "highlight GitGutterAdd    guifg=#01FF99 ctermfg=2
 "highlight GitGutterChange guifg=#01FFFF ctermfg=3
 "highlight GitGutterDelete guifg=#ff2223 ctermfg=1
@@ -353,7 +449,7 @@ autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
 " set to 1, nvim will open the preview window after entering the markdown buffer
 " default: 0
 let g:mkdp_auto_start = 0
-autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
+"autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 "
 "" set to 1, the nvim will auto close current preview window when change
 " from markdown buffer to another buffer
@@ -524,6 +620,7 @@ set winaltkeys=no
 " GUI {{{
 "colorscheme evening
 colorscheme snazzy
+" colorscheme gruvbox
 syntax on
 let g:python_highlight_all = 1
 "set foldlevel=3
@@ -550,7 +647,10 @@ set guioptions-=e
 set nolist
 " set listchars=tab:?\ ,eol:?,trail:·,extends:>,precedes:<
 "set guifont=JetBrains_Mono:h14:cANSI
-set guifont=JetBrainsMono_NF:h14:cANSI
+set guifont=Hack_Nerd_Font_Mono:h14:cANSI
+" set guifont=Dejavu_Sans_Mono:h16:cANSI
+" set guifont=JetBrainsMono_Nerd_Font_Mono:h16:cANSI
+"set guifont=JetBrainsMono_NF:h14:cANSI
 " }}}
 " ------------------------------------------------------------------------
 " Format {{{
@@ -590,7 +690,7 @@ nmap <leader>e :e $VIM/_vimrc<cr>
 nmap <leader>wq :wq<cr>
 nmap <leader>q :q<cr>
 nmap <leader>help :help<space>
-nmap <leader>h :help<space>
+nmap <leader>h :s/
 nmap <leader>sav :saveas<Space>
 nmap <leader>reg :reg<cr>
 "标签页管理 
@@ -607,6 +707,12 @@ noremap <leader>sl :set splitright<CR>:vsplit<CR>
 noremap <leader>sh :set nosplitright<CR>:vsplit<CR>
 noremap <leader>sk :set nosplitbelow<CR>:split<CR>
 noremap <leader>sj :set splitbelow<CR>:split<CR>
+"
+" session management
+nnoremap <leader>so :OpenSession<Space>
+nnoremap <leader>ss :SaveSesion<Space>
+nnoremap <leader>sd :DeleteSession<CR>
+nnoremap <leader>sc :CloseSession<CR>
 
 " Buf Operate
 " 
@@ -749,6 +855,12 @@ autocmd filetype c highlight cBoolean guifg=#E37795
                 "endif
         "
 " }}}
+" Shell {{{
+autocmd BufNewFile *.sh 0r $VIM\vimfiles\template\shell.tpl
+autocmd BufNewFile *.bash 0r $VIM\vimfiles\template\shell.tpl
+
+
+" }}}
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -776,4 +888,12 @@ autocmd filetype c highlight cBoolean guifg=#E37795
 ":echo globpath(&rtp, "keymap/*.vim")  要查看系统有哪些键盘映射表文件，在 GUI 上你可以用 Edit/Keymap 菜单。否则你可以
 "Ctrl+a  先用Ctrl+V选定块然后按g C-a进行递增
 "Ctrl+x  先用Ctrl+V选定块然后按g C-x进行递增
+":verbose map <key> 查看key的映射位置
+"
+"文本排版
+" center   居中
+" left     靠左
+" right    靠右
+"
+" <leader>c<space> NERDCommenterToggle
 "}}}
