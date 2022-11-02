@@ -6,21 +6,16 @@
 "         | | \ \  / ____ \| |__| || |__| || | \ \ 
 "         |_|  \_\/_/    \_\\_____| \____/ |_|  \_\
 "
-"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-"++++++++++++++++++++++++++++FIRST CONFIG+++++++++++++++++++++++++++++++++
-"+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 " VIM_EXAMPLE{{{
 "}}}
 
 " Lang & Encoding {{{
 set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
-set fileformat=dos
+" set the fileformat is unix or dos
+set fileformat=unix
 set encoding=utf-8
 set langmenu=en_US
 "set langmenu=zh_CN
-let $LANG = 'en_US.UTF-8'
-"let $LANG = 'zh_CN.UTF-8'
-"let $LANG = 'en_US.UTF-8'
 "}}}
 
 " MapLeader {{{
@@ -31,17 +26,17 @@ noremap ; :
 language messages en_US.UTF-8
 " }}}
 " ------------------------------------------------------------------------
-" ------------------------------------------------------------------------
+" ----------------------------------------------------------------------- 
 " Plugin-Mng {{{ 
 filetype off
 "set shellslash
 set rtp+=$VIM/vimfiles/bundle/Vundle.vim
+set rtp+=C:\ProgramData\chocolatey\bin
 call plug#begin('$VIM/vimfiles/bundle/')
 " AutoComplete
 "Plug 'Valloric/YoucompleteMe'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'honza/vim-snippets'
-"Plug 'SirVer/ultisnips' 
 " Theme
 Plug 'vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
@@ -53,18 +48,28 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'vim-python/python-syntax'
 "CPP
 Plug 'octol/vim-cpp-enhanced-highlight'
+"
+"Plug 'prabirshrestha/vim-lsp'
+"Plug 'mattn/vim-lsp-settings'
+"Plug 'jackguo381/vim-lsp-cxx-highlight'
 "Plug 'skywind3000/asyncrun.vim'
 Plug 'puremourning/vimspector'
+"Plug 'puremourning/vimspector',{'do':'./install_gadget.py --all'}
 "Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
-"Plug 'python-mode/python-mode'
 " File navigation
-Plug 'preservim/nerdtree'
+"Plug 'preservim/nerdtree'""replaced by coc-explorer
 " git
 Plug 'tpope/vim-fugitive'
+" NERDTree
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
 Plug 'airblade/vim-gitgutter'
-"Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+" fzf
+Plug 'junegunn/fzf',
+Plug 'junegunn/fzf.vim',
+" vim-easymotion
+Plug 'easymotion/vim-easymotion'
 " Taglist
 Plug 'majutsushi/tagbar'
 " Asynchronous Lint Engine //Syntax Error Check 
@@ -76,15 +81,22 @@ Plug 'iamcco/mathjax-support-for-mkdp'
 Plug 'iamcco/markdown-preview.nvim' 
 Plug 'ferrine/md-img-paste.vim'
 "Plug 'iamcco/markdown-preview.vim' 
+
+" commentary
+" Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdcommenter'
+" mult-cursor
+Plug 'terryma/vim-multiple-cursors'
+
+" Terminal
+Plug 'voldikss/vim-floaterm'
+
 call plug#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
 "
 " }}}
- 
-" Plugin-Navigation{{{
-"" }}}
 
 " Plugin-fugitive-git {{{
 nnoremap <leader>git :Git
@@ -96,14 +108,102 @@ cnoremap gc Git commit -m""<left>
 cnoremap gu Git pull
 cnoremap gp Git push
 cnoremap git Git<Space>
-
 " }}}
 
+" Plugin-FZF{{{
+nnoremap <leader>f :FZF<CR>
+nnoremap <leader>fa :FZF<space>
+nnoremap <leader>ff :FZF<space>D:/<CR>
+"}}}
+
+" Plugin-nerdcommenter{{{
+" Create default mappings
+let g:NERDCreateDefaultMappings = 1
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
+
+" [count]<leader>cc |NERDCommenterComment|
+"
+" Comment out the current line or text selected in visual mode.
+"
+" [count]<leader>cn |NERDCommenterNested|
+"
+" Same as cc but forces nesting.
+"
+" [count]<leader>c<space> |NERDCommenterToggle|
+"
+" Toggles the comment state of the selected line(s). If the topmost selected line is commented, all selected lines are uncommented and vice versa.
+"
+" [count]<leader>cm |NERDCommenterMinimal|
+"
+" Comments the given lines using only one set of multipart delimiters.
+"
+" [count]<leader>ci |NERDCommenterInvert|
+"
+" Toggles the comment state of the selected line(s) individually.
+"
+" [count]<leader>cs |NERDCommenterSexy|
+"
+" Comments out the selected lines with a pretty block formatted layout.
+"
+" [count]<leader>cy |NERDCommenterYank|
+"
+" Same as cc except that the commented line(s) are yanked first.
+"
+" <leader>c$ |NERDCommenterToEOL|
+"
+" Comments the current line from the cursor to the end of line.
+"
+" <leader>cA |NERDCommenterAppend|
+"
+" Adds comment delimiters to the end of line and goes into insert mode between them.
+"
+" |NERDCommenterInsert|
+"
+" Adds comment delimiters at the current cursor position and inserts between. Disabled by default.
+"
+" <leader>ca |NERDCommenterAltDelims|
+"
+" Switches to the alternative set of delimiters.
+"
+" [count]<leader>cl |NERDCommenterAlignLeft [count]<leader>cb |NERDCommenterAlignBoth
+"
+" Same as |NERDCommenterComment| except that the delimiters are aligned down the left side (<leader>cl) or both sides (<leader>cb).
+"
+" [count]<leader>cu |NERDCommenterUncomment|
+"
+" Uncomments the selected line(s).
+
+"""}}}
+
 " Plugin-vimspector {{{
-let g:vimspector_enable_mappings = 'HUMAN'
+"let g:vimspector_enable_mappings = 'HUMAN'
 let g:vimspector_install_gadgets = [ 'debugpy', 'vscode-cpptools', 'CodeLLDB' ]
 let g:vimspector_adapters = #{
-      \   test_debugpy: #{ extends: 'debugpy' }
+      \   test_debugpy: #{ extends: 'debugpy' },
+      \   test_cpp: #{ extends: 'vscode-cpptools' }
       \ }
 
 let g:vimspector_configurations = {
@@ -127,14 +227,24 @@ let g:vimspector_configurations = {
       \       "userUnhandled": ""
       \     }
       \   }
-      \ } }
+      \ },
+	  \ "test_cpp_config": {
+      \   "adapter": "vscode-cpptools",
+      \   "filetypes": [ "cpp", "c", "objc", "rust"],
+	  \   "configuration": {
+	  \		"request": "launch",
+	  \		"program": "./debug_C_vimspector",
+	  \		"stopAtEntry": v:true
+	  \	}
+      \ }
+	  \ }
+
 " MAPING-DEBUG  fork JetBrains
 nmap <F5> <Plug>VimspectorContinue
-" <F5> Definition Link to 'CompileRunGcc'--><F5>
 nmap <S-F5> <Plug>VimspectorStop
 nmap <C-F5> <Plug>VimpectorRestart
 nmap <M-F5> <Plug>VimspectorPause
-nmap <F9> <Plug>VimspectorBreakpoints
+"nmap <F9> <Plug>VimspectorBreakpoints
 nmap <F9> <Plug>VimspectorToggleBreakpoint
 nmap <F12> <Plug>VimspectorGoToCurrentLine
 nmap <M-F9> <Plug>VimspectorRunToCursor
@@ -143,34 +253,78 @@ nmap <F7> <Plug>VimspectorStepInto
 nmap <S-F7> <Plug>VimspectorStepOut
 nmap <F10> <Plug>VimspectorUpFrame
 nmap <S-F10> <Plug>VimspectorDownFrame
+
+nmap <F6> :call CompileFunc()<CR>
+func! CompileFunc()
+        exec "w"
+        if &filetype == 'c'
+                exec "!gcc -g % -o debug_C_vimspector"
+        elseif &filetype == 'cpp'
+                exec "!g++ % -o %<"
+                exec "!time ./%<"
+        elseif &filetype == 'java'
+                exec "!javac %"
+                exec "!time java %<"
+        elseif &filetype == 'sh'
+                :!time bash %
+        elseif &filetype == 'html'
+                exec "!firefox % &"
+        elseif &filetype == 'go'
+                exec "!go build %<"
+                exec "!time go run %"
+        "elseif &filetype == 'python'
+            "if search("@profile")
+                "exec "AsyncRun kernprof -l -v %"
+                "exec "copen"
+                "exec "wincmd p"
+            "elseif search("set_trace()")
+                "exec "!python %"
+            "else
+                "exec "AsyncRun -raw python %"
+                "exec "copen"
+                "exec "wincmd p"
+            "endif
+        elseif &filetype == 'markdown'
+                exec "MarkdownPreview"
+        endif
+endfunc
+
+sign define vimspectorBP text=☛ texthl=Normal
+"sign define vimspectorBPDisabled text=☞ texthl=Normal
+"sign define vimspectorPC text=🔶 texthl=Normal
 "packadd! vimspector
 " }}}
 
 " Plugin-GitGutter{{{
+set signcolumn=yes
 let g:gitgutter_sign_allow_clobber = 1
-let g:gitgutter_map_keys = 0
+let g:gitgutter_map_keys = 1
 let g:gitgutter_override_sign_column_highlight = 1
 let g:gitgutter_preview_win_floating = 1
 let g:gitgutter_sign_added = '▎'
-let g:gitgutter_sign_modified = '░'
+let g:gitgutter_sign_modified = '▌'
 let g:gitgutter_sign_removed = '▏'
 let g:gitgutter_sign_removed_first_line = '▔'
-let g:gitgutter_sign_modified_removed = '▒'
+let g:gitgutter_sign_modified_removed = '▍'
+"highlight the GitGutter 
+"highlight GitGutterAdd    guifg=#01FF99 ctermfg=2
+"highlight GitGutterChange guifg=#01FFFF ctermfg=3
+"highlight GitGutterDelete guifg=#ff2223 ctermfg=1
 "nnoremap <LEADER>gf :GitGutterFold<CR>
-"nnoremap H :GitGutterPreviewHunk<CR>
-"nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
-"nnoremap <LEADER>g= :GitGutterNextHunk<CR>
+nnoremap H :GitGutterPreviewHunk<CR>
+nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
+nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 "}}}
 
 " Plugin-COC{{{
+let g:coc_node_path='C:\Program Files (x86)\nodejs\node.exe'
 let g:pydiction_location='$VIM\vimfiles\ftplugin\complet-edict'
 set encoding=utf-8
 set hidden
-" delays and poor user experience.
 set updatetime=200
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
-set signcolumn=number
+"set signcolumn=number
 " coc-highlight 光标悬浮处  高亮
 autocmd CursorHold * silent call CocActionAsync('highlight')
 " Use tab for trigger completion with characters ahead and navigate.
@@ -191,7 +345,6 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
 let g:coc_snippet_next = '<tab>'
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Use <c-space> to trigger completion.
@@ -199,7 +352,6 @@ inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use 'gh' to show documentation in preview window.
 nnoremap <silent> <leader>gh :call <SID>show_documentation()<CR>
-
 " GoTo code navigation.
 nmap <silent> <leader>go <Plug>(coc-definition)
 nmap <silent> <leader>gy <Plug>(coc-type-definition)
@@ -215,7 +367,6 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
-
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
@@ -227,59 +378,28 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 " auto install extentions 
-let g:coc_global_extensions = ['coc-json', 'coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc']
+let g:coc_global_extensions = ['coc-vimlsp','coc-json', 'coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc','coc-explorer']
 
 " confirm choice <CR>
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+"
+"coc-calc
+"
+"" append result on current expression
+" nmap <Leader>ca <Plug>(coc-calc-result-append)
+" replace result on current expression
+" nmap <Leader>cr <Plug>(coc-calc-result-replace)
+"
+"coc-explorer
+"
+nnoremap <leader>nt :CocCommand explorer<CR>
 " }}} 
 
 " Plugin-vim-airline {{{
+let g:airline_powerline_fonts = 1
 " }}}
-
-" [X]Plugin-PyMode {{{
-"let g:pymode = 0
-"let g:pymode_run = 0
-"let g:pymode_run_bind='<leader>r'
-"let g:pymode_rope_goto_definition_bind = ''
-"let g:pymode_python = 'python'
-"let g:pymode_indent = 1
-""Turn on code checking                                           *'g:pymode_lint'*
-"let g:pymode_lint = 1
-""Check code on every save (if file has been modified)   *'g:pymode_lint_on_write'*
-"let g:pymode_lint_on_write = 1
-""Check code on every save (every)                     *'g:pymode_lint_unmodified'*
-"let g:pymode_lint_unmodified = 0
-""Check code when editing (on the fly)                     *'g:pymode_lint_on_fly'*
-"let g:pymode_lint_on_fly = 0
-""Show error message if cursor placed at the error line   *'g:pymode_lint_message'*
-"let g:pymode_lint_message = 1
-"" Default code checkers (you could set several)          *'g:pymode_lint_checkers'*
-"let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
-"" Skip errors and warnings
-"let g:pymode_lint_ignore = ["E501", "W",]
-"" Auto open cwindow (quickfix) if any errors have been found
-"let g:pymode_lint_cwindow = 1
-"" Definitions for |signs
-"let g:pymode_lint_signs = 1
-"let g:pymode_lint_todo_symbol = 'WW'
-"let g:pymode_lint_comment_symbol = 'CC'
-"let g:pymode_lint_visual_symbol = 'RR'
-"let g:pymode_lint_error_symbol = 'EE'
-"let g:pymode_lint_info_symbol = 'II'
-"let g:pymode_lint_pyflakes_symbol = 'FF'
-""
-"COMMAND
-"|:PymodeRopeAutoImport| -- Resolve import for element under cursor
-"|:PymodeRopeModuleToPackage| -- Convert current module to package
-"|:PymodeRopeNewProject| -- Open new Rope project in current working directory
-"|:PymodeRopeRedo| -- Redo changes from last refactoring
-"|:PymodeRopeRegenerate| -- Regenerate the project cache
-"|:PymodeRopeRenameModule| -- Rename current module
-"|:PymodeRopeUndo| -- Undo changes from last refactoring
-"
-"
-"}}}
 
 " Plugin-vim-cpp-enhanced-highlight {{{
 let g:cpp_experimental_template_highlight = 1
@@ -289,11 +409,12 @@ let g:cpp_class_decl_highlight = 1
 let g:cpp_posix_standard = 0
 let g:cpp_experimental_template_highlight = 1
 let g:cpp_concepts_highlight = 1
+
+let g:lsp_cxx_hl_use_text_props = 1
 " }}}
 
 " Plugin-Taglist {{{
 nmap <leader>ll :TagbarToggle<cr>
-
 "默认打开vim时自动开启taglist
 "let Tlist_Auto_Open=1	"默认打开vim时自动开启taglist
 ""自动更新tag
@@ -307,7 +428,6 @@ nmap <leader>ll :TagbarToggle<cr>
 ""如果退出时仅剩taglist窗口，则直接退出vim
 "let Tlist_Exit_OnlyWindow=1	"如果退出时仅剩taglist窗口，则直接退出vim
 "let Tlist_Use_Right_Window=1
-
 "" }}}
 
 " Plugin-ferrine/md-img-paste.vim {{{
@@ -326,21 +446,23 @@ endfunction
 autocmd FileType markdown let g:PasteImageFunction = 'g:MarkdownPasteImage'
 autocmd FileType tex let g:PasteImageFunction = 'g:LatexPasteImage'
 
-  "" }}}
+   "" }}}
 
-" Plugin-Coc.VIM {{{
-let g:coc_node_path='C:\Program Files (x86)\nodejs\node.exe'
-" }}}
-
-" Plugin-auto-pairs {{{
-
-" }}}
+" Plugin-vim-Floaterm{{{
+" Configuration example
+nnoremap   <silent>   <leader>cmd    :FloatermNew<CR>
+tnoremap   <silent>   <F8>    <C-\><C-n>:FloatermPrev<CR>
+tnoremap   <silent>   <F9>    <C-\><C-n>:FloatermNext<CR>
+nnoremap   <silent>   <F11>   :FloatermToggle<CR>
+nnoremap   <silent>   <A-F11>   :FloatermKill<CR>
+tnoremap   <silent>   <F11>   <C-\><C-n>:FloatermToggle<CR>
+"""}}}
 
 " Plugin-Markdown {{{
 " set to 1, nvim will open the preview window after entering the markdown buffer
 " default: 0
 let g:mkdp_auto_start = 0
-autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
+"autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 "
 "" set to 1, the nvim will auto close current preview window when change
 " from markdown buffer to another buffer
@@ -430,69 +552,90 @@ autocmd FileType markdown nmap <F5> :MarkdownPreview<CR>
 "let g:mkdp_filetypes = ['markdown']
 " }}}
 
-" Plugin-nerdtree {{{
-nnoremap <leader>nt :call OpenCurrentDir()<CR>
-function! OpenCurrentDir()
-  execute "NERDTree"
-  execute "NERDTreeRefreshRoot"
-endfunction
-let NERDTreeShowBookmarks=1
-let NERDTreeShowHidden=1
-let NERDTreeWinPos="left"
-""" Exit Vim if NERDTree is the only window remaining in the only tab.
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
-" Open the existing NERDTree on each new tab.
-autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-" adding to vim-airline's statusline
+" Plugin Treesitter{{{
+"lua <<EOF
+"require 'nvim-treesitter.install'.compilers = { "clang" }
+"require'nvim-treesitter.configs'.setup {
+	"-- one of "all", "language", or a list of languages
+	"ensure_installed = {"typescript", "dart", "java", "c", "prisma", "bash"},
+	"highlight = {
+		"enable = true,              -- false will disable the whole extension
+		"disable = { "rust" },  -- list of language that will be disabled
+	"},
+"}
+"EOF
+
+"}}}
+
+" Plugin-nerdtree{{{ 
+" nnoremap <leader>nt :call OpenCurrentDir()<CR>
+" function! OpenCurrentDir()
+"   execute "NERDTreeToggle"
+"   execute "NERDTreeRefreshRoot"
+" endfunction
+" let NERDTreeShowBookmarks=1
+" let NERDTreeShowHidden=1
+" let NERDTreeWinPos="left"
+" autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
+" nnoremap <leader>ntf :NERDTreeRefreshRoot<CR>
+" let g:NERDTreeGitStatusIndicatorMapCustom = {
+"                 \ 'Modified'  :'✹',
+"                 \ 'Staged'    :'✚',
+"                 \ 'Untracked' :'✭',
+"                 \ 'Renamed'   :'➜',
+"                 \ 'Unmerged'  :'═',
+"                 \ 'Deleted'   :'❌',
+"                 \ 'Dirty'     :'✗',
+"                 \ 'Ignored'   :'☒',
+"                 \ 'Clean'     :'✔︎',
+"                 \ 'Unknown'   :'?',
+"                 \ }
+"}}}
+
+"WebdevIcons{{{
 let g:webdevicons_enable_airline_statusline = 1
-let g:airline_powerline_fonts = 1
 " loading the plugin
 let g:webdevicons_enable = 1
-let g:webdevicons_conceal_nerdtree_brackets = 0
-let g:webdevicons_enable_nerdtree = 0
-nnoremap <leader>ntf :NERDTreeFRefreshRoot<CR>
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'✹',
-                \ 'Staged'    :'✚',
-                \ 'Untracked' :'✭',
-                \ 'Renamed'   :'➜',
-                \ 'Unmerged'  :'═',
-                \ 'Deleted'   :'✖',
-                \ 'Dirty'     :'✗',
-                \ 'Ignored'   :'☒',
-                \ 'Clean'     :'✔︎',
-                \ 'Unknown'   :'?',
-                \ }
-" }}}
+let g:webdevicons_conceal_nerdtree_brackets = 1
+let g:webdevicons_enable_nerdtree = 1
+"}}}
 " ------------------------------------------------------------------------
+" ------------------------------------------------------------------------
+
 " ------------------------------------------------------------------------
 " General {{{
 set nocompatible
 "set nobackup
 "set noswapfile
 set history=1024
-set directory=$HOME\.config\vim-config\swp
-set backupdir=$HOME\.config\vim-config\backup
-set undodir=$HOME\.config\vim-config\un
+silent !mkdir -p $HOME/.config/vim-config/swp
+silent !mkdir -p $HOME/.config/vim-config/backup
+silent !mkdir -p $HOME/.config/vim-config/un
+"silent !mkdir -p $HOME/.config/vim-config/sessions
+set directory=$HOME/.config/vim-config/swp
+set backupdir=$HOME/.config/vim-config/backup
+set undodir=$HOME/.config/vim-config/un
 set autochdir
 set whichwrap=b,s,<,>,[,]
 set nobomb
 set backspace=indent,eol,start whichwrap+=<,>,[,]
+set wildmenu
 " Vim 的默认寄存器和系统剪贴板共享
 set clipboard+=unnamed
-" 设置 alt 键不映射到菜单栏
+" 将系统剪贴板与VIM分离
+"vnoremap Y "+y
+"" 设置 alt 键不映射到菜单栏
 set winaltkeys=no
 " }}}
 " ------------------------------------------------------------------------
 " GUI {{{
 "colorscheme evening
 colorscheme snazzy
+" colorscheme gruvbox
 syntax on
-"set background=dark
-"colorscheme hybrid_material 
-let g:hybrid_transparent_background = 1
 let g:python_highlight_all = 1
-
+"set foldlevel=3
 "source $VIMRUNTIME/delmenu.vim
 "source $VIMRUNTIME/menu.vim
 set cursorline
@@ -501,7 +644,7 @@ set number
 set relativenumber
 set scrolloff=4
 " 窗口大小
-set lines=35 columns=140
+set lines=41 columns=170
 " 分割出来的窗口位于当前窗口下边/右边
 set splitbelow
 set splitright
@@ -515,7 +658,11 @@ set guioptions-=b
 set guioptions-=e
 set nolist
 " set listchars=tab:?\ ,eol:?,trail:·,extends:>,precedes:<
-set guifont=JetBrains_Mono:h14:cANSI
+"set guifont=JetBrains_Mono:h14:cANSI
+"set guifont=Hack_Nerd_Font_Mono:h14:cANSI
+"set guifont=Dejavu_Sans_Mono:h16:cANSI
+" set guifont=JetBrainsMono_Nerd_Font_Mono:h16:cANSI
+set guifont=JetBrainsMono_NF:h14:cANSI
 " }}}
 " ------------------------------------------------------------------------
 " Format {{{
@@ -534,7 +681,9 @@ filetype indent plugin on
 augroup fmd_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
+    autocmd FileType vim setlocal foldlevel=0
     autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType python setlocal foldlevel=3
 augroup END
 " }}}
 " Indent{{{
@@ -547,16 +696,17 @@ augroup END
 " }}}
 " ------------------------------------------------------------------------
 "------------------------------NORMAL MODE--------------------------------
-"{{{
 nmap <leader>s :source $VIM/_vimrc<cr>
 nmap <leader>w :w<cr>
 nmap <leader>e :e $VIM/_vimrc<cr>
 nmap <leader>wq :wq<cr>
 nmap <leader>q :q<cr>
 nmap <leader>help :help<space>
-nmap <leader>h :help<space>
+nmap <leader>h :s//g<left><left>
 nmap <leader>sav :saveas<Space>
+nmap <leader>reg :reg<cr>
 "标签页管理 
+"
 "
 map <space><cr> :nohl<cr>
 map <leader>tn :tabnew<cr>
@@ -569,19 +719,28 @@ noremap <leader>sl :set splitright<CR>:vsplit<CR>
 noremap <leader>sh :set nosplitright<CR>:vsplit<CR>
 noremap <leader>sk :set nosplitbelow<CR>:split<CR>
 noremap <leader>sj :set splitbelow<CR>:split<CR>
+"
+" session management
+nnoremap <leader>so :OpenSession<Space>
+nnoremap <leader>ss :SaveSesion<Space>
+nnoremap <leader>sd :DeleteSession<CR>
+nnoremap <leader>sc :CloseSession<CR>
+
+" Buf Operate
+" 
+nmap <leader>bb :buffers<CR>
+nmap <leader>bn :bnext<CR>
+nmap <leader>bp :bprevious<CR>
+nmap <leader>bf :bfirst<CR>
+nmap <leader>bl :blast<CR>
+nmap <leader>b :b
+
 " 移动分割窗口
 nmap <C-j> <C-W>j
 nmap <C-k> <C-W>k
 nmap <C-h> <C-W>h
 nmap <C-l> <C-W>l
  
-nmap <leader>bb :buffers<CR>
-nmap <leader>bn :bnext<CR>
-nmap <leader>bp :bprevious<CR>
-nmap <leader>bf :bfirst<CR>
-nmap <leader>bl :blast<CR>
-
-
 " 正常模式下 alt+j,k,h,l 调整分割窗口大小
 nnoremap <M-k> :resize +5<cr>
 nnoremap <M-j> :resize -5<cr>
@@ -592,11 +751,14 @@ nnoremap <S-k> 3k
 nnoremap <S-j> 3j
 " goto mark位置
 nnoremap gm g`
+nnoremap E $
+nnoremap W ^
+
 " 打开当前目录 windows
 map <leader>ex :!start explorer %:p:h<CR>
  
 " 打开当前目录CMD
-map <leader>cmd :!start<cr>
+"map <leader>cmd :!start<cr>
 " 打印当前时间
 map <F3> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
  
@@ -613,7 +775,7 @@ nnoremap vv ^vg_
 " 重复上次操作
 nnoremap U <C-r>
 nnoremap <C-a> ggvG$
-"}}}
+
 " -----------------------------------------------------------------------
 "-------------------------------INSERT MODE-------------------------------
 " ------------------------------------------------------------------------
@@ -656,17 +818,18 @@ exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
 
 
-map <F4> :call CodeFormatter()<CR>
+nmap <F4> :call CodeFormatter()<CR>
 func! CodeFormatter()
         exec "w"
         if &filetype == 'markdown'
                 exec "TableFormat"
+                exec "MarkdownPreview"
         endif
 endfunc
 
-
 " ============================ Necessary Commands to Execute ====================
 exec "nohlsearch"
+exec "cd D:/0-ROGAR/3-Code/0-Notes/gvim-craft/"
 
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++DEVELOP ENV+++++++++++++++++++++++++++++++++
@@ -705,10 +868,17 @@ autocmd filetype c highlight cBoolean guifg=#E37795
                 "endif
         "
 " }}}
+
+"" Shell {{{
+autocmd BufNewFile *.sh 0r $VIM\vimfiles\template\shell.tpl
+autocmd BufNewFile *.bash 0r $VIM\vimfiles\template\shell.tpl
+
+
+" }}}
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-""操作技巧"
+" 操作技巧{{{
 """Normal Mode
 " :数字     --跳转到该行
 " 数字%     --跳转到百分比位置
@@ -723,4 +893,23 @@ autocmd filetype c highlight cBoolean guifg=#E37795
 "zn,zN      --打开所有折叠
 "za，zA     --打开当前光标位置所有折叠
 "zc，zo     --关闭、打开折叠
+"zj         -- next fold positon
+"zk         -- pre fold positon
+"zm			-- fold more
+"zr			-- fold reduce
 "
+":lmap     要查看键映射的列表，用这个命令: >
+":echo globpath(&rtp, "keymap/*.vim")  要查看系统有哪些键盘映射表文件，在 GUI 上你可以用 Edit/Keymap 菜单。否则你可以
+"Ctrl+a  先用Ctrl+V选定块然后按g C-a进行递增
+"Ctrl+x  先用Ctrl+V选定块然后按g C-x进行递增
+":verbose map <key> 查看key的映射位置
+"
+"文本排版
+" center   居中
+" left     靠左
+" right    靠右
+"
+":term bash 打开bash终端可以运行shell程序；
+":term 直接打开windows终端
+" <leader>c<space> NERDCommenterToggle
+"}}}
