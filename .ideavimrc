@@ -1,0 +1,118 @@
+"" Source your .vimrc
+"source ~/.vimrc
+
+"" -- Suggested options --
+" Show a few lines of context around the cursor. Note that this makes the
+" text scroll if you mouse-click near the start or end of the window.
+let mapleader=" "
+" vim自带命令用空格来替代:
+noremap ; :
+
+" Do incremental searching.
+set incsearch
+set scrolloff=4
+set showcmd
+set relativenumber
+set number
+set ignorecase
+
+" Don't use Ex mode, use Q for formatting.
+"
+" NORMAL MODE
+"
+nmap <leader>s :source ~/.ideavimrc
+nmap <leader>w :w<cr>
+nmap <leader>e :e ~/.ideavimrc<cr>
+nmap <leader>wq :wq<cr>
+nmap <leader>q :q<cr>
+nmap <leader>help :help<space>
+nmap <leader>h :help<space>
+nmap <leader>sav :saveas<Space>
+nmap <leader>reg :reg<cr>
+
+"
+map <space><cr> :nohl<cr>
+map <leader>tn :tabnew<cr>
+map <leader>tc :tabclose<cr>
+map <leader>th :tabpre<cr>
+map <leader>tl :tabnext<cr>
+map <leader>to :tabonly<cr>
+" 分割窗口管理
+noremap <leader>sl :set splitright<CR>:vsplit<CR>
+noremap <leader>sh :set nosplitright<CR>:vsplit<CR>
+noremap <leader>sk :set nosplitbelow<CR>:split<CR>
+noremap <leader>sj :set splitbelow<CR>:split<CR>
+
+" session management
+nnoremap <leader>so :OpenSession<Space>
+nnoremap <leader>ss :SaveSesion<Space>
+nnoremap <leader>sd :DeleteSession<CR>
+nnoremap <leader>sc :CloseSession<CR>
+" Buf Operate
+"
+nmap <leader>bb :buffers<CR>
+nmap <leader>bn :bnext<CR>
+nmap <leader>bp :bprevious<CR>
+nmap <leader>bf :bfirst<CR>
+nmap <leader>bl :blast<CR>
+nmap <leader>b :b
+
+" 移动分割窗口
+nmap <C-j> <C-W>j
+nmap <C-k> <C-W>k
+nmap <C-h> <C-W>h
+nmap <C-l> <C-W>l
+
+" 正常模式下 alt+j,k,h,l 调整分割窗口大小
+nnoremap <M-k> :resize +5<cr>
+nnoremap <M-j> :resize -5<cr>
+nnoremap <M-l> :vertical resize -5<cr>
+nnoremap <M-h> :vertical resize +5<cr>
+" 快速移动 shift + 方向键
+nnoremap <S-k> 3k
+nnoremap <S-j> 3j
+" goto mark位置
+nnoremap gm g`
+nnoremap E $
+nnoremap W ^
+nnoremap <F2> :setlocal relativenumber!<cr>
+
+nnoremap <C-left> :bn<CR>
+nnoremap <C-right> :bp<CR>
+"选择当前行
+nnoremap vv ^vg_
+" 重复上次操作
+nnoremap U <C-r>
+nnoremap <C-a> ggvG$
+"
+" INSERT MODE
+"
+inoremap <M-j> <Down>
+inoremap <M-k> <Up>
+inoremap <M-h> <left>
+inoremap <M-l> <Right>
+inoremap jj <Esc>
+
+"
+" VISUAL MODE
+"
+vnoremap  J :move '>+1<CR>gv=gv
+vnoremap  K :move '<-2<CR>gv=gv
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4t
+"" Map \r to the Reformat Code action
+"map \r <Action>(ReformatCode)
+
+"" Map <leader>d to start debug
+"map <leader>d <Action>(Debug)
+
+"" Map \b to toggle the breakpoint on the current line
+"map \b <Action>(ToggleLineBreakpoint)
+
+set NERDTree
+noremap <leader>nt :NERDTreeToggle<CR>
+set easymotion
+set commentary
+Plug 'vim-multiple-cursors'
+set multiple-cursor
+
+" Find more examples here: https://jb.gg/share-ideavimrc
