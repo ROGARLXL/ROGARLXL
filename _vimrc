@@ -6,8 +6,9 @@
 "         | | \ \  / ____ \| |__| || |__| || | \ \ 
 "         |_|  \_\/_/    \_\\_____| \____/ |_|  \_\
 "
-" VIM_EXAMPLE{{{
-"}}}
+" ------------------------------------------------------------------------
+" ---------------------------FIRST SETTING-------------------------------
+" ------------------------------------------------------------------------ 
 
 " Lang & Encoding {{{
 set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
@@ -15,7 +16,8 @@ set fileencodings=utf-8,gbk2312,gbk,gb18030,cp936
 set fileformat=unix
 set encoding=utf-8
 set langmenu=en_US
-"set langmenu=zh_CN
+" don't set langmenu----the bottom line of gui
+" set langmenu=zh_CN
 "}}}
 
 " MapLeader {{{
@@ -24,38 +26,42 @@ let mapleader=" "
 " vim自带命令用空格来替代:
 noremap ; :
 language messages en_US.UTF-8
+
 " }}}
 " ------------------------------------------------------------------------
-" ----------------------------------------------------------------------- 
+" ---------------------------PLUGIN SETTING-------------------------------
+" ------------------------------------------------------------------------ 
 " Plugin-Mng {{{ 
 filetype off
 "set shellslash
 set rtp+=$VIM/vimfiles/bundle/Vundle.vim
 set rtp+=C:\ProgramData\chocolatey\bin
 call plug#begin('$VIM/vimfiles/bundle/')
+" StartUp
+Plug 'dstein64/vim-startuptime'
+Plug 'mhinz/vim-startify'
 " AutoComplete
-"Plug 'Valloric/YoucompleteMe'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'honza/vim-snippets'
-" Theme
+" Airline
 Plug 'vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
+" Theme -- colorscheme
 Plug 'connorholyday/vim-snazzy'
 Plug 'morhetz/gruvbox'
 Plug 'altercation/vim-colors-solarized'
+Plug 'KeitaNakamura/neodark.vim'
+Plug 'sainnhe/everforest'
+Plug 'sainnhe/sonokai'
+Plug 'joshdick/onedark.vim'
+Plug 'voidekh/kyotonight.vim'
 " Python
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-python/python-syntax'
 "CPP
 Plug 'octol/vim-cpp-enhanced-highlight'
 "
-"Plug 'prabirshrestha/vim-lsp'
-"Plug 'mattn/vim-lsp-settings'
-"Plug 'jackguo381/vim-lsp-cxx-highlight'
-"Plug 'skywind3000/asyncrun.vim'
 Plug 'puremourning/vimspector'
-"Plug 'puremourning/vimspector',{'do':'./install_gadget.py --all'}
-"Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 " File navigation
 "Plug 'preservim/nerdtree'""replaced by coc-explorer
 " git
@@ -63,34 +69,35 @@ Plug 'tpope/vim-fugitive'
 " NERDTree
 Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
+" Git Tool Instegrated
 Plug 'airblade/vim-gitgutter'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 " fzf
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim',
+Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' },
 " vim-easymotion
 Plug 'easymotion/vim-easymotion'
+" Plug 'justinmk/vim-sneak'
 " Taglist
 Plug 'majutsushi/tagbar'
-" Asynchronous Lint Engine //Syntax Error Check 
-"Plug 'dense-analysis/ale'
-" Markdown 
 Plug 'godlygeek/tabular'
+" Markdown 
 Plug 'preservim/vim-markdown'
+Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'iamcco/mathjax-support-for-mkdp'
-Plug 'iamcco/markdown-preview.nvim' 
-Plug 'ferrine/md-img-paste.vim'
-"Plug 'iamcco/markdown-preview.vim' 
-
+Plug 'img-paste-devs/img-paste.vim'
+" Which Keymap
+Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
 " commentary
-" Plug 'tpope/vim-commentary'
 Plug 'preservim/nerdcommenter'
+Plug 'tpope/vim-commentary'
 " mult-cursor
-Plug 'terryma/vim-multiple-cursors'
-
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 " Terminal
 Plug 'voldikss/vim-floaterm'
-
+" Calender
+Plug 'mattn/calendar-vim'
 call plug#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
@@ -98,26 +105,100 @@ filetype plugin indent on    " required
 "
 " }}}
 
+" Plugin-motion{{{
+" Gif config
+map <Leader>l <Plug>(easymotion-lineforward)
+map <Leader>j <Plug>(easymotion-j)
+map <Leader>k <Plug>(easymotion-k)
+map <Leader>h <Plug>(easymotion-linebackward)
+
+let g:EasyMotion_startofline = 0 " keep cursor column when JK motion
+let g:EasyMotion_smartcase = 1
+
+" <Leader>f{char} to move to {char}
+map  <Leader>f <Plug>(easymotion-bd-f)
+nmap <Leader>f <Plug>(easymotion-overwin-f)
+
+" Gif config
+nmap s <Plug>(easymotion-s2)
+nmap t <Plug>(easymotion-t2)
+
+" Gif config
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+
+" These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
+" Without these mappings, `n` & `N` works fine. (These mappings just provide
+" different highlight method and have some other features )
+map  n <Plug>(easymotion-next)
+map  N <Plug>(easymotion-prev)
+
+
+"""}}}
+
+"VIM WHICH KEY{{{
+nnoremap <silent> <leader> :WhichKey '<Space>'<CR>
+" By default timeoutlen is 1000 ms
+set timeoutlen=500
+
+
+"""}}}
+
 " Plugin-fugitive-git {{{
 nnoremap <leader>git :Git
-cnoremap ga Git add<Space>
-cnoremap gM Git merge master<CR>
+cnoremap ga Git add<Space>.
+cnoremap gM Git merge master
 cnoremap gm Git merge<Space>
-cnoremap gt Git branch -a<CR>zn:Git checkout<Space> 
+cnoremap gb Git branch -a<CR>zn:Git checkout<Space> 
 cnoremap gc Git commit -m""<left>
 cnoremap gu Git pull
 cnoremap gp Git push
 cnoremap git Git<Space>
 " }}}
 
-" Plugin-FZF{{{
-nnoremap <leader>f :FZF<CR>
-nnoremap <leader>fa :FZF<space>
-nnoremap <leader>ff :FZF<space>D:/<CR>
+" Plugin-LeaderF/FZF{{{
+" nnoremap <leader>f :FZF<CR>
+" nnoremap <leader>fa :FZF<space>
+" nnoremap <leader>ff :FZF<space>D:/<CR>
+" don't show the help in normal mode
+let g:Lf_HideHelp = 0
+let g:Lf_UseCache = 0
+let g:Lf_UseVersionControlTool = 0
+let g:Lf_IgnoreCurrentBufferName = 1
+" popup mode
+let g:Lf_WindowPosition = 'popup'
+let g:Lf_PreviewInPopup = 1
+let g:Lf_StlSeparator = { 'left': "\ue0b0", 'right': "\ue0b2", 'font':"JetBrainsMono NF" }
+let g:Lf_PreviewResult = {'Function': 0, 'BufTag': 0 }
+
+let g:Lf_ShortcutF = "<leader>ff"
+noremap <leader>fb :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+noremap <leader>fm :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
+noremap <leader>ft :<C-U><C-R>=printf("Leaderf bufTag %s", "")<CR><CR>
+noremap <leader>fl :<C-U><C-R>=printf("Leaderf line %s", "")<CR><CR>
+
+" noremap <C-B> :<C-U><C-R>=printf("Leaderf! rg --current-buffer -e %s ", expand("<cword>"))<CR>
+" noremap <C-F> :<C-U><C-R>=printf("Leaderf! rg -e %s ", expand("<cword>"))<CR>
+" search visually selected text literally
+" xnoremap gf :<C-U><C-R>=printf("Leaderf! rg -F -e %s ", leaderf#Rg#visual())<CR>
+" noremap go :<C-U>Leaderf! rg --recall<CR>
+
+" should use `Leaderf gtags --update` first
+" let g:Lf_GtagsAutoGenerate = 0
+" let g:Lf_Gtagslabel = 'native-pygments'
+" noremap <leader>fr :<C-U><C-R>=printf("Leaderf! gtags -r %s --auto-jump", expand("<cword>"))<CR><CR>
+" noremap <leader>fd :<C-U><C-R>=printf("Leaderf! gtags -d %s --auto-jump", expand("<cword>"))<CR><CR>
+" noremap <leader>fo :<C-U><C-R>=printf("Leaderf! gtags --recall %s", "")<CR><CR>
+" noremap <leader>fn :<C-U><C-R>=printf("Leaderf gtags --next %s", "")<CR><CR>
+" noremap <leader>fp :<C-U><C-R>=printf("Leaderf gtags --previous %s", "")<CR><CR>
 "}}}
 
 " Plugin-nerdcommenter{{{
-" Create default mappings
+"
+noremap cm g@
+noremap cmm g@_
+"
+"" Create default mappings
 let g:NERDCreateDefaultMappings = 1
 
 " Add spaces after comment delimiters by default
@@ -143,7 +224,6 @@ let g:NERDTrimTrailingWhitespace = 1
 
 " Enable NERDCommenterToggle to check all selected lines is commented or not 
 let g:NERDToggleCheckAllLines = 1
-
 " [count]<leader>cc |NERDCommenterComment|
 "
 " Comment out the current line or text selected in visual mode.
@@ -240,11 +320,21 @@ let g:vimspector_configurations = {
 	  \ }
 
 " MAPING-DEBUG  fork JetBrains
-nmap <F5> <Plug>VimspectorContinue
-nmap <S-F5> <Plug>VimspectorStop
-nmap <C-F5> <Plug>VimpectorRestart
+" nmap <F5> <Plug>VimspectorContinue
+nmap <F5> :call CodeRunner()<CR>
+func! CodeRunner()
+        exec "w"
+        if &filetype == 'markdown'
+			exec "MarkdownPreview"
+		else
+		    execute "call vimspector#Continue()"
+        endif
+endfunc
+
+nmap <S-F5> :VimspectorReset<cr>
+nmap <C-F5> <Plug>VimspectorRestart
 nmap <M-F5> <Plug>VimspectorPause
-"nmap <F9> <Plug>VimspectorBreakpoints
+
 nmap <F9> <Plug>VimspectorToggleBreakpoint
 nmap <F12> <Plug>VimspectorGoToCurrentLine
 nmap <M-F9> <Plug>VimspectorRunToCursor
@@ -288,10 +378,10 @@ func! CompileFunc()
                 exec "MarkdownPreview"
         endif
 endfunc
-
-sign define vimspectorBP text=☛ texthl=Normal
-"sign define vimspectorBPDisabled text=☞ texthl=Normal
-"sign define vimspectorPC text=🔶 texthl=Normal
+"This is sign of vimspector PC\BP
+sign define vimspectorBPDisabled text=☞ texthl=Normal
+sign define vimspectorBP text=🔶 texthl=Normal
+sign define vimspectorPC text=☛ texthl=Normal
 "packadd! vimspector
 " }}}
 
@@ -311,7 +401,7 @@ let g:gitgutter_sign_modified_removed = '▍'
 "highlight GitGutterChange guifg=#01FFFF ctermfg=3
 "highlight GitGutterDelete guifg=#ff2223 ctermfg=1
 "nnoremap <LEADER>gf :GitGutterFold<CR>
-nnoremap H :GitGutterPreviewHunk<CR>
+" nnoremap H :GitGutterPreviewHunk<CR>
 nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
 nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 "}}}
@@ -319,6 +409,8 @@ nnoremap <LEADER>g= :GitGutterNextHunk<CR>
 " Plugin-COC{{{
 let g:coc_node_path='C:\Program Files (x86)\nodejs\node.exe'
 let g:pydiction_location='$VIM\vimfiles\ftplugin\complet-edict'
+" auto install extentions 
+let g:coc_global_extensions = ['coc-vimlsp','coc-json','coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc','coc-explorer','coc-prettier','coc-yank',"coc-markdownlint"]
 set encoding=utf-8
 set hidden
 set updatetime=200
@@ -327,6 +419,7 @@ set shortmess+=c
 "set signcolumn=number
 " coc-highlight 光标悬浮处  高亮
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
@@ -357,6 +450,10 @@ nmap <silent> <leader>go <Plug>(coc-definition)
 nmap <silent> <leader>gy <Plug>(coc-type-definition)
 nmap <silent> <leader>gi <Plug>(coc-implementation)
 nmap <silent> <leader>gr <Plug>(coc-references)
+" Use `[g` and `]g` to navigate diagnostics
+" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -367,6 +464,24 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
+" Applying code actions to the selected code block
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying code actions at the cursor position
+nmap <leader>ac  <Plug>(coc-codeaction-cursor)
+" Remap keys for apply code actions affect whole buffer
+nmap <leader>as  <Plug>(coc-codeaction-source)
+" Apply the most preferred quickfix action to fix diagnostic on the current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Remap keys for applying refactor code actions
+nmap <silent> <leader>re <Plug>(coc-codeaction-refactor)
+xmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+nmap <silent> <leader>r  <Plug>(coc-codeaction-refactor-selected)
+" Symbol renaming
+nmap <leader>rn <Plug>(coc-rename)
 " Map function and class text objects
 " NOTE: Requires 'textDocument.documentSymbol' support from the language server.
 xmap if <Plug>(coc-funcobj-i)
@@ -377,13 +492,21 @@ xmap ic <Plug>(coc-classobj-i)
 omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
-" auto install extentions 
-let g:coc_global_extensions = ['coc-vimlsp','coc-json', 'coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc','coc-explorer']
 
 " confirm choice <CR>
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+"Multiple cursors support
+hi CocCursorRange guibg=#b16286 guifg=#ebdbb2
+" nmap <silent> <C-q> <Plug>(coc-cursors-position)
+" nmap <silent> <C-e> <Plug>(coc-cursors-word)
+" nmap <silent> <C-e> <Plug>(coc-cursors-word)*
+" xmap <silent> <C-e> y/\V<C-r>=escape(@",'/\')<CR><CR>gN<Plug>(coc-cursors-range)gn
+" xmap <silent> <C-g> <Plug>(coc-cursors-range)
+" " use normal command like `<leader>xi(`
+" nmap <leader>x  <Plug>(coc-cursors-operator)
+"---------------------------------------------------
 "
 "coc-calc
 "
@@ -395,6 +518,12 @@ inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR
 "coc-explorer
 "
 nnoremap <leader>nt :CocCommand explorer<CR>
+" 
+" coc-prettier
+"
+vmap <leader>l  <Plug>(coc-format-selected)
+cnoremap fmt Prettier<CR>
+"
 " }}} 
 
 " Plugin-vim-airline {{{
@@ -414,7 +543,7 @@ let g:lsp_cxx_hl_use_text_props = 1
 " }}}
 
 " Plugin-Taglist {{{
-nmap <leader>ll :TagbarToggle<cr>
+nnoremap <leader>ll :TagbarToggle<cr>
 "默认打开vim时自动开启taglist
 "let Tlist_Auto_Open=1	"默认打开vim时自动开启taglist
 ""自动更新tag
@@ -433,8 +562,8 @@ nmap <leader>ll :TagbarToggle<cr>
 " Plugin-ferrine/md-img-paste.vim {{{
 autocmd FileType markdown nmap <buffer><silent> <leader>p :call mdip#MarkdownClipboardImage()<CR>
 " there are some defaults for image directory and image name, you can change them
-let g:mdip_imgdir_absolute = 'D:\0-ROGAR\3-Code\0-Notes\0MarkDownImage'
-let g:mdip_imgname = 'moimage'
+let g:mdip_imgdir_absolute = '.'
+let g:mdip_imgname = 'md_image'
 "
 function! g:LatexPasteImage(relpath)
     execute "normal! i\\includegraphics{" . a:relpath . "}\r\\caption{I"
@@ -493,7 +622,8 @@ let g:mkdp_auto_start = 0
 
 " specify browser to open preview page
 " default: ''
-"let g:mkdp_browser = 'edge'
+" let g:mkdp_browser = 'edge'
+" let g:mkdp_browser = 'chrome'
 
 " set to 1, echo preview page url in command line when open preview page
 " default is 0
@@ -567,6 +697,16 @@ let g:mkdp_auto_start = 0
 
 "}}}
 
+" Plugin-vim-visual-multi{{{
+" select words with Ctrl-N 
+" create cursor vertical with ctrl-Down
+" press n/N to get next/previous occurrence
+" press [ / ] to select next/previous cursor
+nmap \\ <plug>(VM-Add-Cursor-At-Pos)
+nmap <C-e> <plug>(VM-Find-Word)
+"
+" }}}
+
 " Plugin-nerdtree{{{ 
 " nnoremap <leader>nt :call OpenCurrentDir()<CR>
 " function! OpenCurrentDir()
@@ -593,6 +733,15 @@ let g:mkdp_auto_start = 0
 "                 \ }
 "}}}
 
+"Calender{{{
+let g:calendar_diary = "D:/0-ROGAR/3-Code/0-Notes/diary"  " 设置日记的存储路径
+let g:calendar_monday = 1           " 以星期一为开始
+let g:calendar_focus_today = 1      " 光标在当天的日期上
+let g:calendar_mark = 'right'
+noremap <leader>date :Calendar<cr> 
+let g:calendar_datetime = 'title'
+"}}}
+
 "WebdevIcons{{{
 let g:webdevicons_enable_airline_statusline = 1
 " loading the plugin
@@ -601,18 +750,17 @@ let g:webdevicons_conceal_nerdtree_brackets = 1
 let g:webdevicons_enable_nerdtree = 1
 "}}}
 " ------------------------------------------------------------------------
-" ------------------------------------------------------------------------
-
+"------------------------------GENERAL SETTING----------------------------
 " ------------------------------------------------------------------------
 " General {{{
 set nocompatible
 "set nobackup
 "set noswapfile
 set history=1024
-silent !mkdir -p $HOME/.config/vim-config/swp
-silent !mkdir -p $HOME/.config/vim-config/backup
-silent !mkdir -p $HOME/.config/vim-config/un
-"silent !mkdir -p $HOME/.config/vim-config/sessions
+" silent !mkdir -p $HOME/.config/vim-config/swp
+" silent !mkdir -p $HOME/.config/vim-config/backup
+" silent !mkdir -p $HOME/.config/vim-config/un
+" silent !mkdir -p $HOME/.config/vim-config/sessions
 set directory=$HOME/.config/vim-config/swp
 set backupdir=$HOME/.config/vim-config/backup
 set undodir=$HOME/.config/vim-config/un
@@ -621,31 +769,25 @@ set whichwrap=b,s,<,>,[,]
 set nobomb
 set backspace=indent,eol,start whichwrap+=<,>,[,]
 set wildmenu
+set noshowmode
 " Vim 的默认寄存器和系统剪贴板共享
 set clipboard+=unnamed
-" 将系统剪贴板与VIM分离
-"vnoremap Y "+y
 "" 设置 alt 键不映射到菜单栏
 set winaltkeys=no
-" }}}
-" ------------------------------------------------------------------------
-" GUI {{{
-"colorscheme evening
-colorscheme snazzy
-" colorscheme gruvbox
+"
+" Theme
+"colorscheme snazzy
+colorscheme neodark
 syntax on
 let g:python_highlight_all = 1
-"set foldlevel=3
-"source $VIMRUNTIME/delmenu.vim
-"source $VIMRUNTIME/menu.vim
-set cursorline
+set nocursorline
 set hlsearch
 set number
 set relativenumber
 set scrolloff=4
 " 窗口大小
-set lines=41 columns=170
-" 分割出来的窗口位于当前窗口下边/右边
+set lines=41 columns=120
+" 分割出来的窗口位于当前窗口下边/右
 set splitbelow
 set splitright
 "不显示工具/菜单栏
@@ -657,15 +799,10 @@ set guioptions-=b
 " 使用内置 tab 样式而不是 gui
 set guioptions-=e
 set nolist
-" set listchars=tab:?\ ,eol:?,trail:·,extends:>,precedes:<
-"set guifont=JetBrains_Mono:h14:cANSI
-"set guifont=Hack_Nerd_Font_Mono:h14:cANSI
-"set guifont=Dejavu_Sans_Mono:h16:cANSI
-" set guifont=JetBrainsMono_Nerd_Font_Mono:h16:cANSI
-set guifont=JetBrainsMono_NF:h14:cANSI
-" }}}
-" ------------------------------------------------------------------------
-" Format {{{
+set guifont=JetBrainsMono_NF:h13:cANSI
+set guifontwide=黑体:h15:cGB2312
+" set guifont=Hack_Nerd_Font_Mono:h12:cANSI
+" NOTE: Don't wanna to change the font of Chinese, Cause of that VIM8 had not support the Feature, But  you can download SrcCode to Compile the new version. 
 set autoindent
 set smartindent
 set smartcase
@@ -675,9 +812,8 @@ set shiftwidth=2
 set softtabstop=4
 set foldmethod=indent
 syntax on
-" FoldMethod {{{
 filetype indent plugin on
-" vim 文件折叠方式为 marker
+" vim 文件折叠方式为 marker{{{
 augroup fmd_vim
     autocmd!
     autocmd FileType vim setlocal foldmethod=marker
@@ -686,27 +822,28 @@ augroup fmd_vim
     autocmd FileType python setlocal foldlevel=3
 augroup END
 " }}}
-" Indent{{{
+" 文件缩进 Indent{{{
 augroup idt_vim
     autocmd!
     autocmd FileType python setlocal tabstop=4
 augroup END
 " }}}
-"autocmd FileType python set omnifunc=pythoncomplete#Complete
-" }}}
+" 
 " ------------------------------------------------------------------------
 "------------------------------NORMAL MODE--------------------------------
+" ------------------------------------------------------------------------
+"""{{{
 nmap <leader>s :source $VIM/_vimrc<cr>
 nmap <leader>w :w<cr>
 nmap <leader>e :e $VIM/_vimrc<cr>
 nmap <leader>wq :wq<cr>
 nmap <leader>q :q<cr>
 nmap <leader>help :help<space>
-nmap <leader>h :s//g<left><left>
+nmap <leader>r :s//g<left><left>
 nmap <leader>sav :saveas<Space>
 nmap <leader>reg :reg<cr>
-"标签页管理 
 "
+"标签页管理 
 "
 map <space><cr> :nohl<cr>
 map <leader>tn :tabnew<cr>
@@ -714,18 +851,21 @@ map <leader>tc :tabclose<cr>
 map <leader>th :tabpre<cr>
 map <leader>tl :tabnext<cr>
 map <leader>to :tabonly<cr>
+"
 " 分割窗口管理
+"
 noremap <leader>sl :set splitright<CR>:vsplit<CR>
 noremap <leader>sh :set nosplitright<CR>:vsplit<CR>
 noremap <leader>sk :set nosplitbelow<CR>:split<CR>
 noremap <leader>sj :set splitbelow<CR>:split<CR>
 "
 " session management
+"
 nnoremap <leader>so :OpenSession<Space>
 nnoremap <leader>ss :SaveSesion<Space>
 nnoremap <leader>sd :DeleteSession<CR>
 nnoremap <leader>sc :CloseSession<CR>
-
+"
 " Buf Operate
 " 
 nmap <leader>bb :buffers<CR>
@@ -734,6 +874,11 @@ nmap <leader>bp :bprevious<CR>
 nmap <leader>bf :bfirst<CR>
 nmap <leader>bl :blast<CR>
 nmap <leader>b :b
+" 设置切换Buffer快捷键"
+nnoremap <C-left> :bn<CR>
+nnoremap <C-right> :bp<CR>
+nmap <S-l> :bprevious<CR>
+nmap <S-h> :bnext<CR>
 
 " 移动分割窗口
 nmap <C-j> <C-W>j
@@ -761,30 +906,29 @@ map <leader>ex :!start explorer %:p:h<CR>
 "map <leader>cmd :!start<cr>
 " 打印当前时间
 map <F3> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
- 
 " 复制当前文件/路径到剪贴板
 nmap ,fn :let @*=substitute(expand("%"), "/", "\\", "g")<CR>
 nmap ,fp :let @*=substitute(expand("%:p"), "/", "\\", "g")<CR>
 " 设置行号显示 
 nnoremap <F2> :setlocal relativenumber!<cr>
-" 设置切换Buffer快捷键"
-nnoremap <C-left> :bn<CR>
-nnoremap <C-right> :bp<CR>
 "选择当前行 
 nnoremap vv ^vg_
 " 重复上次操作
 nnoremap U <C-r>
 nnoremap <C-a> ggvG$
 
+"""}}}
 " -----------------------------------------------------------------------
 "-------------------------------INSERT MODE-------------------------------
 " ------------------------------------------------------------------------
+"""{{{
 " 插入模式移动光标 alt + 方向键
 inoremap <M-j> <Down>
 inoremap <M-k> <Up>
 inoremap <M-h> <left>
 inoremap <M-l> <Right>
 inoremap jj <Esc>
+inoremap kk <Esc>
 "复制当前行到下一行
 inoremap <C-d> <esc>"xyy<CR>"xP<CR>2k<CR>i
 " 删除前一个Word
@@ -795,8 +939,10 @@ inoremap <C-u> <esc>mzgUiw`za
 imap <C-v> "+gP
 " 全选所有buffer字符
 imap <C-a> <esc>ggvG$
+"""}}}
 " ------------------------------------------------------------------------
 "------------------------------VISUAL MODE---------------------------------
+"""{{{
 vmap <C-c> "+y
 vnoremap <BS> d
 vnoremap <C-C> "+y
@@ -804,9 +950,11 @@ vnoremap <C-Insert> "+y
 vnoremap  w aw
 vnoremap  J :move '>+1<CR>gv=gv
 vnoremap  K :move '<-2<CR>gv=gv
+"""}}}
 " ------------------------------------------------------------------------
 " --------------------------COMMAND MODE----------------------------------
 " ------------------------------------------------------------------------
+"""{{{
 map <S-Insert>		"+gP
 " 命令模式下的行首尾
 cnoremap <C-a> <home>
@@ -816,6 +964,11 @@ cmap <S-Insert>		<C-R>+
 " 常规操作-复制、黏贴、选择 CO/PY CUT PASTE SELETED
 exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
 exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
+"
+" set hex edit mode
+"
+cnoremap hex %!xxd<cr>
+" cnoremap dishex %!xxd -r<cr>
 
 
 nmap <F4> :call CodeFormatter()<CR>
@@ -823,11 +976,11 @@ func! CodeFormatter()
         exec "w"
         if &filetype == 'markdown'
                 exec "TableFormat"
-                exec "MarkdownPreview"
+                " exec "MarkdownPreview"
         endif
 endfunc
-
-" ============================ Necessary Commands to Execute ====================
+"""}}}
+"============================ Necessary Commands to Execute ====================
 exec "nohlsearch"
 exec "cd D:/0-ROGAR/3-Code/0-Notes/gvim-craft/"
 
@@ -868,13 +1021,29 @@ autocmd filetype c highlight cBoolean guifg=#E37795
                 "endif
         "
 " }}}
+"""{{{
+autocmd BufNewFile *.lua 0r $VIM\vimfiles\template\lua.tpl
+"""}}}
 
-"" Shell {{{
+"""Shell {{{
 autocmd BufNewFile *.sh 0r $VIM\vimfiles\template\shell.tpl
 autocmd BufNewFile *.bash 0r $VIM\vimfiles\template\shell.tpl
-
-
 " }}}
+"
+"
+"""{{{
+" vim -b : edit binary using xxd-format!
+  " augroup Binary
+  "   au!
+  "   au BufReadPre  *.bin let &bin=1
+  "   au BufReadPost *.bin if &bin | %!xxd
+  "   au BufReadPost *.bin set ft=xxd | endif
+  "   au BufWritePre *.bin if &bin | %!xxd -r
+  "   au BufWritePre *.bin endif
+  "   au BufWritePost *.bin if &bin | %!xxd
+  "   au BufWritePost *.bin set nomod | endif
+  " augroup END
+"""}}}
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -883,6 +1052,8 @@ autocmd BufNewFile *.bash 0r $VIM\vimfiles\template\shell.tpl
 " :数字     --跳转到该行
 " 数字%     --跳转到百分比位置
 " gE        --回到上一个单词
+" gU		--Uppercase the selected word/paragragh
+" gu		--Lowercase the selected word/paragragh
 " %         --跳转到匹配的括号
 "aw         --'a word' select choice
 "iw         --'inner word' select choice
@@ -902,8 +1073,11 @@ autocmd BufNewFile *.bash 0r $VIM\vimfiles\template\shell.tpl
 ":echo globpath(&rtp, "keymap/*.vim")  要查看系统有哪些键盘映射表文件，在 GUI 上你可以用 Edit/Keymap 菜单。否则你可以
 "Ctrl+a  先用Ctrl+V选定块然后按g C-a进行递增
 "Ctrl+x  先用Ctrl+V选定块然后按g C-x进行递增
+"I	列块插入	先用Ctrl+V选定块|v_b_I|
+"A	列块添加	先用Ctrl+V选定块|v_b_A|
 ":verbose map <key> 查看key的映射位置
 "
+":command    查看所有用户自定义命令
 "文本排版
 " center   居中
 " left     靠左
@@ -912,4 +1086,81 @@ autocmd BufNewFile *.bash 0r $VIM\vimfiles\template\shell.tpl
 ":term bash 打开bash终端可以运行shell程序；
 ":term 直接打开windows终端
 " <leader>c<space> NERDCommenterToggle
+"
+"
+":!%xxd 切换到十六进制模式显示
+"%!”为调用第三方操作对vim内容进行操作，
+"如 :%!tr a-z A-Z 把全文小写字母改成大写
+"
+"Substitute-替换 {{{
+"在VIM中进行文本替换：
+   "
+    " 1.  替换当前行中的内容：    :s/from/to/    （s即substitude）
+    "     :s/from/to/     ：  将当前行中的第一个from，替换成to。如果当前行含有多个
+    "                         from，则只会替换其中的第一个。
+    "     :s/from/to/g    ：  将当前行中的所有from都替换成to。
+    "     :s/from/to/gc   ：  将当前行中的所有from都替换成to，但是每一次替换之前都
+    "                         会询问请求用户确认此操作。
+   "
+    "     注意：这里的from和to都可以是任何字符串，其中from还可以是正则表达式。
+   "
+    " 2.  替换某一行的内容：      :33s/from/to/g
+    "     :.s/from/to/g   ：  在当前行进行替换操作。
+    "     :33s/from/to/g  ：  在第33行进行替换操作。
+    "     :$s/from/to/g   ：  在最后一行进行替换操作。
+   "
+    " 3.  替换某些行的内容：      :10,20s/from/to/g
+    "     :10,20s/from/to/g   ：  对第10行到第20行的内容进行替换。
+    "     :1,$s/from/to/g     ：  对第一行到最后一行的内容进行替换（即全部文本）。
+    "     :1,.s/from/to/g     ：  对第一行到当前行的内容进行替换。
+    "     :.,$s/from/to/g     ：  对当前行到最后一行的内容进行替换。
+    "     :'a,'bs/from/to/g   ：  对标记a和b之间的行（含a和b所在的行）进行替换。
+    "                             其中a和b是之前用m命令所做的标记。
+   "
+    " 4.  替换所有行的内容：      :%s/from/to/g
+    "     :%s/from/to/g   ：  对所有行的内容进行替换。
+   "
+    " 5.  替换命令的完整形式：    :[range]s/from/to/[flags]
+    "     5.1 s/from/to/
+    "         把from指定的字符串替换成to指定的字符串，from可以是正则表达式。
+    "     5.2 [range]
+    "         有以下一些表示方法：
+    "         不写range   ：  默认为光标所在的行。
+    "         .           ：  光标所在的行。
+    "         1           ：  第一行。
+    "         $           ：  最后一行。
+    "         33          ：  第33行。
+    "         'a          ：  标记a所在的行（之前要使用ma做过标记）。
+    "         .+1         ：  当前光标所在行的下面一行。
+    "         $-1         ：  倒数第二行。（这里说明我们可以对某一行加减某个数值来
+    "                         取得相对的行）。
+    "         22,33       ：  第22～33行。
+    "         1,$         ：  第1行 到 最后一行。
+    "         1,.         ：  第1行 到 当前行。
+    "         .,$         ：  当前行 到 最后一行。
+    "         'a,'b       ：  标记a所在的行 到 标记b所在的行。
+   "
+    "         %           ：  所有行（与 1,$ 等价）。
+   "
+    "         ?chapter?   ：  从当前位置向上搜索，找到的第一个chapter所在的行。（
+    "                         其中chapter可以是任何字符串或者正则表达式。
+    "         /chapter/   ：  从当前位置向下搜索，找到的第一个chapter所在的行。（
+    "                         其中chapter可以是任何字符串或者正则表达式。
+   "
+    "         注意，上面的所有用于range的表示方法都可以通过 +、- 操作来设置相对偏
+    "         移量。
+   "
+    "     5.3 [flags]
+    "         这里可用的flags有：
+   "
+    "         无      ：  只对指定范围内的第一个匹配项进行替换。
+    "         g       ：  对指定范围内的所有匹配项进行替换。
+    "         c       ：  在替换前请求用户确认。
+    "         e       ：  忽略执行过程中的错误。
+   "
+    "         注意：上面的所有flags都可以组合起来使用，比如 gc 表示对指定范围内的
+    "         所有匹配项进行替换，并且在每一次替换之前都会请用户确认。
+" }}}
+"
 "}}}
+"
