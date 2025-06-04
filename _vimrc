@@ -40,12 +40,17 @@ call plug#begin('$VIM/vimfiles/bundle/')
 " StartUp
 Plug 'dstein64/vim-startuptime'
 Plug 'mhinz/vim-startify'
+
 " AutoComplete
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'prabirshrestha/vim-lsp'
+Plug 'mattn/vim-lsp-settings'
 Plug 'honza/vim-snippets'
+
 " Airline
 Plug 'vim-airline/vim-airline' 
 Plug 'vim-airline/vim-airline-themes'
+
 " Theme -- colorscheme
 Plug 'connorholyday/vim-snazzy'
 Plug 'morhetz/gruvbox'
@@ -55,49 +60,67 @@ Plug 'sainnhe/everforest'
 Plug 'sainnhe/sonokai'
 Plug 'joshdick/onedark.vim'
 Plug 'voidekh/kyotonight.vim'
-" Python
+
+" Python  Syntax
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-python/python-syntax'
-"CPP
+" CPP Syntax
 Plug 'octol/vim-cpp-enhanced-highlight'
-"
+" Verilog automatic 
+Plug 'HonkW93/automatic-verilog'
+Plug 'vhda/verilog_systemverilog.vim'
+" 
+" Debugger
 Plug 'puremourning/vimspector'
-" File navigation
-"Plug 'preservim/nerdtree'""replaced by coc-explorer
-" git
-Plug 'tpope/vim-fugitive'
+
 " NERDTree
-Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'ryanoasis/vim-devicons'
+
 " Git Tool Instegrated
+Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+
 " fzf
 Plug 'junegunn/fzf',
 Plug 'junegunn/fzf.vim',
 Plug 'Yggdroot/LeaderF', { 'do': ':LeaderfInstallCExtension' },
+
 " vim-easymotion
 Plug 'easymotion/vim-easymotion'
 " Plug 'justinmk/vim-sneak'
+
 " Taglist
 Plug 'majutsushi/tagbar'
 Plug 'godlygeek/tabular'
+Plug 'liuchengxu/vista.vim'
+
 " Markdown 
 Plug 'preservim/vim-markdown'
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'vim-plug']}
 Plug 'iamcco/mathjax-support-for-mkdp'
 Plug 'img-paste-devs/img-paste.vim'
+
 " Which Keymap
 Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+
 " commentary
 Plug 'preservim/nerdcommenter'
 Plug 'tpope/vim-commentary'
+
 " mult-cursor
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
+
 " Terminal
 Plug 'voldikss/vim-floaterm'
+
 " Calender
 Plug 'mattn/calendar-vim'
+
+" Buffertabline 
+Plug 'zefei/vim-wintabs'
+Plug 'zefei/vim-wintabs-powerline'
 call plug#end()            " required
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
@@ -105,9 +128,9 @@ filetype plugin indent on    " required
 "
 " }}}
 
-" Plugin-motion{{{
+" Plugin-Easymotion{{{
 " Gif config
-map <Leader>l <Plug>(easymotion-lineforward)
+" map <Leader>l <Plug>(easymotion-lineforward)
 map <Leader>j <Plug>(easymotion-j)
 map <Leader>k <Plug>(easymotion-k)
 map <Leader>h <Plug>(easymotion-linebackward)
@@ -124,14 +147,14 @@ nmap s <Plug>(easymotion-s2)
 nmap t <Plug>(easymotion-t2)
 
 " Gif config
-map  / <Plug>(easymotion-sn)
-omap / <Plug>(easymotion-tn)
+map  <leader>/ <Plug>(easymotion-sn)
+omap <leader>/ <Plug>(easymotion-tn)
 
 " These `n` & `N` mappings are options. You do not have to map `n` & `N` to EasyMotion.
 " Without these mappings, `n` & `N` works fine. (These mappings just provide
 " different highlight method and have some other features )
-map  n <Plug>(easymotion-next)
-map  N <Plug>(easymotion-prev)
+map  <leader>n <Plug>(easymotion-next)
+map  <leader>N <Plug>(easymotion-prev)
 
 
 """}}}
@@ -331,8 +354,8 @@ func! CodeRunner()
         endif
 endfunc
 
-nmap <S-F5> :VimspectorReset<cr>
-nmap <C-F5> <Plug>VimspectorRestart
+nmap <S-F5> <Plug>(VimspectorReset)
+nmap <C-F5> <Plug>(VimspectorRestart)
 nmap <M-F5> <Plug>VimspectorPause
 
 nmap <F9> <Plug>VimspectorToggleBreakpoint
@@ -397,20 +420,29 @@ let g:gitgutter_sign_removed = '▏'
 let g:gitgutter_sign_removed_first_line = '▔'
 let g:gitgutter_sign_modified_removed = '▍'
 "highlight the GitGutter 
-"highlight GitGutterAdd    guifg=#01FF99 ctermfg=2
-"highlight GitGutterChange guifg=#01FFFF ctermfg=3
-"highlight GitGutterDelete guifg=#ff2223 ctermfg=1
+highlight GitGutterAdd    guifg=#01FF99 ctermfg=2
+highlight GitGutterChange guifg=#01FFFF ctermfg=3
+highlight GitGutterDelete guifg=#ff2223 ctermfg=1
 "nnoremap <LEADER>gf :GitGutterFold<CR>
 " nnoremap H :GitGutterPreviewHunk<CR>
-nnoremap <LEADER>g- :GitGutterPrevHunk<CR>
-nnoremap <LEADER>g= :GitGutterNextHunk<CR>
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+nmap <leader>hs <Plug>(GitGutterStageHunk)
+nmap <leader>hu <Plug>(GitGutterUndoHunk)
+nmap <leader>hp <Plug>(GitGutterPreviewHunk)
+" Your vimrc
+function! GitStatus()
+  let [a,m,r] = GitGutterGetHunkSummary()
+  return printf('+%d ~%d -%d', a, m, r)
+endfunction
+set statusline+=%{GitStatus()}
 "}}}
 
 " Plugin-COC{{{
 let g:coc_node_path='C:\Program Files (x86)\nodejs\node.exe'
 let g:pydiction_location='$VIM\vimfiles\ftplugin\complet-edict'
 " auto install extentions 
-let g:coc_global_extensions = ['coc-vimlsp','coc-json','coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc','coc-explorer','coc-prettier','coc-yank',"coc-markdownlint"]
+let g:coc_global_extensions = ['coc-lightbulb','coc-vimlsp','coc-json','coc-tsserver','coc-clangd','coc-python','coc-snippets','coc-calc','coc-explorer','coc-prettier','coc-yank','coc-markdownlint']
 set encoding=utf-8
 set hidden
 set updatetime=200
@@ -420,31 +452,43 @@ set shortmess+=c
 " coc-highlight 光标悬浮处  高亮
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Use tab for trigger completion with characters ahead and navigate.
+" Use tab for trigger completion with characters ahead and navigate
+" NOTE: There's always complete item selected by default, you may want to enable
+" no select by `"suggest.noselect": true` in your configuration file
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-"inoremap <silent><expr> <TAB>
-      "\ pumvisible() ? coc#_select_confirm() :
-      "\ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      "\ <SID>check_back_space() ? "\<TAB>" :
-      "\ coc#refresh()
-
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
+" other plugin before putting this into your config
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
       \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
-function! s:check_back_space() abort
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
 let g:coc_snippet_next = '<tab>'
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
 
 " Use 'gh' to show documentation in preview window.
 nnoremap <silent> <leader>gh :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
 " GoTo code navigation.
 nmap <silent> <leader>go <Plug>(coc-definition)
 nmap <silent> <leader>gy <Plug>(coc-type-definition)
@@ -455,15 +499,6 @@ nmap <silent> <leader>gr <Plug>(coc-references)
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
 " Applying code actions to the selected code block
 " Example: `<leader>aap` for current paragraph
 xmap <leader>a  <Plug>(coc-codeaction-selected)
@@ -493,10 +528,42 @@ omap ic <Plug>(coc-classobj-i)
 xmap ac <Plug>(coc-classobj-a)
 omap ac <Plug>(coc-classobj-a)
 
-" confirm choice <CR>
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"-----------------------------------------------
+"2023-08-12 周六 04:23 下午 add coc config
+"-----------------------------------------------
+" Add `:Format` command to format current buffer
+command! -nargs=0 Format :call CocActionAsync('format')
 
+" Add `:Fold` command to fold current buffer
+command! -nargs=? Fold :call     CocAction('fold', <f-args>)
+
+" Add `:OR` command for organize imports of the current buffer
+command! -nargs=0 OR   :call     CocActionAsync('runCommand', 'editor.action.organizeImport')
+
+" Add (Neo)Vim's native statusline support
+" NOTE: Please see `:h coc-status` for integrations with external plugins that
+" provide custom statusline: lightline.vim, vim-airline
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Mappings for CoCList
+" Show all diagnostics
+" nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+" Manage extensions
+ " nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+" Show commands
+" nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+" Find symbol of current document
+" nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+" Search workspace symbols
+" nnoremap <silent><nowait> <space>ls  :<C-u>CocList -I symbols<cr>
+" Do default action for next item
+" nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+" " Do default action for previous item
+" nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+" " Resume latest coc list
+" nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+"
+"-----------------------------------------------
 "Multiple cursors support
 hi CocCursorRange guibg=#b16286 guifg=#ebdbb2
 " nmap <silent> <C-q> <Plug>(coc-cursors-position)
@@ -518,6 +585,7 @@ hi CocCursorRange guibg=#b16286 guifg=#ebdbb2
 "coc-explorer
 "
 nnoremap <leader>nt :CocCommand explorer<CR>
+cnoremap Ex :CocCommand explorer<Space>
 " 
 " coc-prettier
 "
@@ -682,19 +750,46 @@ let g:mkdp_auto_start = 0
 "let g:mkdp_filetypes = ['markdown']
 " }}}
 
-" Plugin Treesitter{{{
-"lua <<EOF
-"require 'nvim-treesitter.install'.compilers = { "clang" }
-"require'nvim-treesitter.configs'.setup {
-	"-- one of "all", "language", or a list of languages
-	"ensure_installed = {"typescript", "dart", "java", "c", "prisma", "bash"},
-	"highlight = {
-		"enable = true,              -- false will disable the whole extension
-		"disable = { "rust" },  -- list of language that will be disabled
-	"},
-"}
-"EOF
+"Plugin vim-lsp{{{
+if executable('pylsp')
+    " pip install python-lsp-server
+    au User lsp_setup call lsp#register_server({
+        \ 'name': 'pylsp',
+        \ 'cmd': {server_info->['pylsp']},
+        \ 'allowlist': ['python'],
+        \ })
+endif
+" consider to config <leader>+key
+" ----------2023-08-17 周四 09:43 下午
+function! s:on_lsp_buffer_enabled() abort
+    setlocal omnifunc=lsp#complete
+    setlocal signcolumn=yes
+    if exists('+tagfunc') | setlocal tagfunc=lsp#tagfunc | endif
+    nmap <buffer> gd <plug>(lsp-definition)
+    nmap <buffer> gs <plug>(lsp-document-symbol-search)
+    nmap <buffer> gS <plug>(lsp-workspace-symbol-search)
+    nmap <buffer> gr <plug>(lsp-references)
+    nmap <buffer> gi <plug>(lsp-implementation)
+    nmap <buffer> gt <plug>(lsp-type-definition)
+    nmap <buffer> <leader>rn <plug>(lsp-rename)
+    nmap <buffer> [g <plug>(lsp-previous-diagnostic)
+    nmap <buffer> ]g <plug>(lsp-next-diagnostic)
+    nmap <buffer> gh <plug>(lsp-hover)
+    nnoremap <buffer> <expr><c-f> lsp#scroll(+4)
+    nnoremap <buffer> <expr><c-d> lsp#scroll(-4)
 
+    let g:lsp_format_sync_timeout = 1000
+    autocmd! BufWritePre *.rs,*.go call execute('LspDocumentFormatSync')
+    
+    " refer to doc to add more commands
+endfunction
+
+augroup lsp_install
+    au!
+    " call s:on_lsp_buffer_enabled only for languages that has the server registered.
+    autocmd User lsp_buffer_enabled call s:on_lsp_buffer_enabled()
+augroup END
+"
 "}}}
 
 " Plugin-vim-visual-multi{{{
@@ -754,15 +849,15 @@ let g:webdevicons_enable_nerdtree = 1
 " ------------------------------------------------------------------------
 " General {{{
 set nocompatible
-"set nobackup
-"set noswapfile
+set nobackup
+set noswapfile
 set history=1024
 " silent !mkdir -p $HOME/.config/vim-config/swp
 " silent !mkdir -p $HOME/.config/vim-config/backup
 " silent !mkdir -p $HOME/.config/vim-config/un
 " silent !mkdir -p $HOME/.config/vim-config/sessions
-set directory=$HOME/.config/vim-config/swp
-set backupdir=$HOME/.config/vim-config/backup
+"set directory=$HOME/.config/vim-config/swp
+"set backupdir=$HOME/.config/vim-config/backup
 set undodir=$HOME/.config/vim-config/un
 set autochdir
 set whichwrap=b,s,<,>,[,]
@@ -776,8 +871,9 @@ set clipboard+=unnamed
 set winaltkeys=no
 "
 " Theme
-"colorscheme snazzy
-colorscheme neodark
+" colorscheme snazzy
+" colorscheme neodark
+colorscheme onedark
 syntax on
 let g:python_highlight_all = 1
 set nocursorline
@@ -825,6 +921,7 @@ augroup END
 " 文件缩进 Indent{{{
 augroup idt_vim
     autocmd!
+    autocmd FileType verilog setlocal tabstop=4
     autocmd FileType python setlocal tabstop=4
 augroup END
 " }}}
@@ -877,9 +974,12 @@ nmap <leader>b :b
 " 设置切换Buffer快捷键"
 nnoremap <C-left> :bn<CR>
 nnoremap <C-right> :bp<CR>
-nmap <S-l> :bprevious<CR>
-nmap <S-h> :bnext<CR>
-
+nnoremap <S-l> :bprevious<CR>
+nnoremap <S-h> :bnext<CR>
+" nmap <S-l> :WintabsNext<CR>
+" nmap <S-h> :WintabsPrevious<CR>
+"
+"
 " 移动分割窗口
 nmap <C-j> <C-W>j
 nmap <C-k> <C-W>k
@@ -907,8 +1007,8 @@ map <leader>ex :!start explorer %:p:h<CR>
 " 打印当前时间
 map <F3> a<C-R>=strftime("%Y-%m-%d %a %I:%M %p")<CR><Esc>
 " 复制当前文件/路径到剪贴板
-nmap ,fn :let @*=substitute(expand("%"), "/", "\\", "g")<CR>
-nmap ,fp :let @*=substitute(expand("%:p"), "/", "\\", "g")<CR>
+nmap <leader>yfn :let @*=substitute(expand("%"), "/", "\\", "g")<CR>
+nmap <leader>yfp :let @*=substitute(expand("%:p"), "/", "\\", "g")<CR>
 " 设置行号显示 
 nnoremap <F2> :setlocal relativenumber!<cr>
 "选择当前行 
@@ -1020,17 +1120,23 @@ autocmd filetype c highlight cBoolean guifg=#E37795
                     "exec ""wincmd p"
                 "endif
         "
-" }}}
-"""{{{
+""" }}}
+ 
+" LUA{{{
 autocmd BufNewFile *.lua 0r $VIM\vimfiles\template\lua.tpl
 """}}}
 
-"""Shell {{{
+"Shell {{{
 autocmd BufNewFile *.sh 0r $VIM\vimfiles\template\shell.tpl
 autocmd BufNewFile *.bash 0r $VIM\vimfiles\template\shell.tpl
 " }}}
-"
-"
+
+""verilog{{{
+
+autocmd BufNewFile *.v 0r $VIM\vimfiles\template\verilog.tpl
+" }}}
+" 
+
 """{{{
 " vim -b : edit binary using xxd-format!
   " augroup Binary
@@ -1163,4 +1269,5 @@ autocmd BufNewFile *.bash 0r $VIM\vimfiles\template\shell.tpl
 " }}}
 "
 "}}}
+"
 "
